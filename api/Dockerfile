@@ -1,5 +1,9 @@
 FROM php:8.1.16-fpm
 
+ARG MODE=development
+
+ENV APP_ENV=$MODE
+
 # Set working directory
 WORKDIR /var/www
 
@@ -28,13 +32,12 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
 # Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 
-# Copy composer.lock and composer.json
-COPY composer*.json .
+# Run Composer
+COPY composer*.json ./
 
-# install composer dep
-RUN composer install --no-scripts --no-autoloader
+RUN if [[ "$MODE" = "production" ]] ; then composer install --no-dev --no-scripts --no-autoloader ; else composer install --no-scripts --no-autoloader ; fi
 
 # Copy existing application directory contents
 COPY . .
@@ -45,8 +48,6 @@ RUN composer dump-autoload
 RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
-# Copy existing application directory permissions
-#COPY --chown=www:www . /var/www
 RUN chown -R www:www /var/www
 
 # Change current user to www

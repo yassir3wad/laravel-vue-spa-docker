@@ -3,11 +3,12 @@ name: "spa-stg"
 services:
   webserver:
     ports:
-      - "8002:80"
+      - "${DOCKER_PORT_WEBSERVER:-8002}:80"
 
   api:
-    environment:
-      - APP_ENV=staging
+    build:
+      args:
+        MODE: staging
     volumes:
       - ./api/local.ini:/usr/local/etc/php/conf.d/local.ini
 
@@ -20,7 +21,6 @@ services:
 
   client:
     build:
-      target: build-staging
-    environment:
-      - PORT=3000
-      - NODE_ENV=staging
+      target: build-stage
+      args:
+        MODE: staging

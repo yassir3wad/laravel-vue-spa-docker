@@ -3,11 +3,12 @@ name: "spa-prd"
 services:
   webserver:
     ports:
-      - "8001:80"
+      - "${DOCKER_PORT_WEBSERVER:-8001}:80"
 
   api:
-    environment:
-      - APP_ENV=production
+    build:
+      args:
+        MODE: production
     volumes:
       - ./api/local.ini:/usr/local/etc/php/conf.d/local.ini
 
@@ -20,7 +21,6 @@ services:
 
   client:
     build:
-      target: build-production
-    environment:
-      - PORT=3000
-      - NODE_ENV=production
+      target: build-stage
+      args:
+        MODE: production

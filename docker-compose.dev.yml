@@ -3,11 +3,12 @@ name: "spa-dev"
 services:
   webserver:
     ports:
-      - "8000:80"
+      - "${DOCKER_PORT_WEBSERVER:-8000}:80"
 
   api:
-    environment:
-      - APP_ENV=development
+    build:
+      args:
+        MODE: development
     volumes:
       - ./api/:/var/www/
       - /var/www/vendor
@@ -22,10 +23,10 @@ services:
 
   client:
     build:
-      target: local
+      target: serve-stage
+      args:
+        MODE: development
     volumes:
       - ./client/src/:/app/src/
     environment:
-      - PORT=3000
-      - NODE_ENV=development
-      - APP_URL=http://client.localhost:8000
+      - APP_URL=http://client.localhost:${DOCKER_PORT_WEBSERVER:-8000}
