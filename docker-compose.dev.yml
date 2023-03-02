@@ -1,0 +1,31 @@
+version: "3.8"
+name: "spa-dev"
+services:
+  webserver:
+    ports:
+      - "8000:80"
+
+  api:
+    environment:
+      - APP_ENV=development
+    volumes:
+      - ./api/:/var/www/
+      - /var/www/vendor
+      - ./api/local.ini:/usr/local/etc/php/conf.d/local.ini
+
+  db:
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+
+  client:
+    build:
+      target: local
+    volumes:
+      - ./client/src/:/app/src/
+    environment:
+      - PORT=3000
+      - NODE_ENV=development
+      - APP_URL=http://client.localhost:8000

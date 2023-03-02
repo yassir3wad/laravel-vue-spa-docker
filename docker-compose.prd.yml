@@ -1,0 +1,26 @@
+version: "3.8"
+name: "spa-prd"
+services:
+  webserver:
+    ports:
+      - "8001:80"
+
+  api:
+    environment:
+      - APP_ENV=production
+    volumes:
+      - ./api/local.ini:/usr/local/etc/php/conf.d/local.ini
+
+  db:
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_ROOT_PASSWORD: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+
+  client:
+    build:
+      target: build-production
+    environment:
+      - PORT=3000
+      - NODE_ENV=production

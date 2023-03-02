@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  webserver:
+#    container_name: webserver-ctr
+    image: nginx:alpine
+    volumes:
+      - ./api/:/var/www/
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - api
+      - client
+
+  api:
+#    container_name: api-ctr
+    image: spa/api
+    build:
+      context: ./api
+
+  db:
+#    container_name: db-ctr
+    image: mysql:8.0.32
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - dbdata:/var/lib/mysql/
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+
+  client:
+#    container_name: client-ctr
+    image: spa/client
+    build:
+      context: ./client
+
+volumes:
+  dbdata:
+    driver: local
