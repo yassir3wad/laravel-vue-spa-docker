@@ -1,10 +1,6 @@
-version: "3.8"
+version: "3.9"
 name: "spa-prd"
 services:
-  webserver:
-    ports:
-      - "${DOCKER_PORT_WEBSERVER:-8001}:80"
-
   api:
     build:
       args:
@@ -12,7 +8,7 @@ services:
     volumes:
       - ./api/local.ini:/usr/local/etc/php/conf.d/local.ini
 
-  db:
+  mysql:
     environment:
       MYSQL_DATABASE: laravel
       MYSQL_ROOT_PASSWORD: laravel

@@ -17,6 +17,8 @@ Route::get('/', function () {
 	return view('welcome');
 });
 
-Route::get('/xxx', function () {
-	dd($_SERVER);
+Route::get('/server', function (\Illuminate\Http\Request $request) {
+	$header = $request->cookie('X-XSRF-TOKEN');
+	return $request->header();
+	return $_COOKIE;
 });

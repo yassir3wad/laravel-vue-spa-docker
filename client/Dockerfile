@@ -1,6 +1,6 @@
 FROM node:16.16.0-alpine3.16 AS base
 ARG MODE=development
-ENV APP_ENV=$MODE
+ENV NODE_ENV=$MODE
 WORKDIR /app
 COPY ./package*.json ./
 RUN npm install
@@ -16,7 +16,7 @@ RUN npm run build
 
 FROM node:16.16.0-alpine3.16 AS build-stage
 ARG MODE=development
-ENV APP_ENV=$MODE
+ENV NODE_ENV=$MODE
 ENV PORT=3000
 EXPOSE 3000
 WORKDIR /app

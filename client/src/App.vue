@@ -4,14 +4,16 @@
     class="h-100"
     :class="[skinClasses]"
   >
-    <component :is="layout">
+    <component :is="layout" v-if="$store.getters['auth/checked']">
       <router-view />
     </component>
 
+    <scroll-to-top v-if="enableScrollToTop" />
   </div>
 </template>
 
 <script>
+import ScrollToTop from '@core/components/scroll-to-top/ScrollToTop.vue'
 
 // This will be populated in `beforeCreate` hook
 import { $themeColors, $themeBreakpoints, $themeConfig } from '@themeConfig'
@@ -35,6 +37,7 @@ export default {
     LayoutVertical,
     LayoutFull,
 
+    ScrollToTop,
   },
   // ! We can move this computed: layout & contentLayoutType once we get to use Vue 3
   // Currently, router.currentRoute is not reactive and doesn't trigger any change
@@ -70,6 +73,7 @@ export default {
   },
   setup() {
     const { skin, skinClasses } = useAppConfig()
+    const { enableScrollToTop } = $themeConfig.layout
 
     // If skin is dark when initialized => Add class to body
     if (skin.value === 'dark') document.body.classList.add('dark-layout')
@@ -95,6 +99,7 @@ export default {
 
     return {
       skinClasses,
+      enableScrollToTop,
     }
   },
 }

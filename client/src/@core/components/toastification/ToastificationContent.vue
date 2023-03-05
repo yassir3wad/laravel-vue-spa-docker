@@ -41,12 +41,8 @@
 </template>
 
 <script>
-import { BAvatar } from 'bootstrap-vue'
 
 export default {
-  components: {
-    BAvatar,
-  },
   props: {
     variant: {
       type: String,
@@ -61,7 +57,6 @@ export default {
       default: null,
     },
     text: {
-      type: String,
       default: null,
     },
     hideClose: {
