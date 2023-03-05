@@ -183,11 +183,8 @@ export default {
             email: this.email,
             password: this.password,
           }).then(() => {
-            this.$toast.success("Successfully logged in");
-          }).catch(error => {
-            if (error.response && error.response.status === 302) {
-              this.$router.push({name: 'home'});
-            }
+            this.$toast.success(this.$t("Successfully logged in"));
+            this.$router.push({name: 'home'});
           })
               .catch(error => this.handleResponseError(error, this.$refs.loginValidation))
               .finally(() => {

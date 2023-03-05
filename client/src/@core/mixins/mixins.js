@@ -9,7 +9,7 @@ export default {
 					}
 					this.showErrorsInToastr($errors);
 				} else {
-					this.toast('danger', 'Error', error.response.data.message);
+					this.toast('danger', this.$t("Error"), error.response.data.message);
 				}
 			}
 		},
@@ -26,7 +26,7 @@ export default {
 			});
 
 			if ($items.length) {
-				this.toast('danger', 'Error', h('ul', $items))
+				this.toast('danger', this.$t("Error"), h('ul', $items))
 			}
 		},
 		toast(variant, title, message) {

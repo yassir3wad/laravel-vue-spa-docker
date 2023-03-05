@@ -10,3 +10,4 @@
 - Nginx
 - Mysql
 - Redis
+- i18n
