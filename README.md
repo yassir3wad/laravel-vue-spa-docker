@@ -2,7 +2,7 @@
   <img src="https://laravelvuespa.com/preview-dark.png" width="400" />
 </p>
 
-# Laravel & Vuexy Starter Kit
+# Laravel & Vuexy SPA Starter Kit
 [![](https://img.shields.io/badge/vue.js-v2.6-04C690.svg)](https://vuejs.org/)
 [![](https://img.shields.io/badge/Laravel-v10.0-ff2e21.svg)](https://laravel.com)
 ![Test PHP](https://github.com/fumeapp/laranuxt/workflows/Test%20PHP/badge.svg)
