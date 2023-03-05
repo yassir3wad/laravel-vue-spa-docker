@@ -45,3 +45,16 @@ docker-compose -f docker-compose.yml -f docker-compose.prd.yml up --build
 
 ## Customize configuration
 #### 1) Vue Env [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+### Roadmap
+* [x] Laravel, Sunctum, and Fortify installations
+* [x] Vue & vuex installations
+* [x] Setup Vuexy Template
+* [x] Login
+* [ ] Forget & Reset Password
+* [ ] Setup Laravel Permission
+* [ ] Users Module
+* [ ] Roles Module
+* [ ] Update Profile
+
