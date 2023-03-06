@@ -10,16 +10,14 @@
 
 ## Technology
 - Laravel 10
-- Vue 2.6
+- Vue, Vuex, i18n
 - [Vuexy Theme](https://themeforest.net/item/vuexy-vuejs-html-laravel-admin-dashboard-template/23328599)
-- Sanctum (session)
+- Sanctum for Authentication (session)
 - Fortify
 - Docker & Docker Compose
 - Nginx
 - Mysql
 - Redis
-- i18n
-- Vuex
 - Mailpit (as a test mail driver)
 
 ## How it works
@@ -48,14 +46,21 @@ docker-compose -f docker-compose.yml -f docker-compose.prd.yml up --build
 #### 1) Vue Env [Configuration Reference](https://cli.vuejs.org/config/).
 
 
-### Roadmap
+## Roadmap
 * [x] Laravel, Sunctum, and Fortify installations
 * [x] Vue & vuex installations
 * [x] Setup Vuexy Template
 * [x] Login
-* [ ] Forget & Reset Password
+* [x] Forget & Reset Password
+* [ ] Update Profile Info
+* [ ] Update Password
 * [ ] Setup Laravel Permission
-* [ ] Users Module
 * [ ] Roles Module
-* [ ] Update Profile
+* [ ] Users Module
+* [ ] Social Login
+* [ ] Settings Module
+* [ ] Notifications Module
+* [ ] Chat Module
 
+## Contributing
+Contributions are **welcome** and will be fully **credited**.
