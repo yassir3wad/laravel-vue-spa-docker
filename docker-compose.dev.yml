@@ -9,13 +9,23 @@ services:
       - ./api/:/var/www/
       - /var/www/vendor
       - ./api/local.ini:/usr/local/etc/php/conf.d/local.ini
-
+    environment:
+      - CLIENT_APP_URL=http://localhost:${DOCKER_WEBSERVER_CLIENT_PORT:-3000}
   mysql:
     environment:
       MYSQL_DATABASE: laravel
       MYSQL_ROOT_PASSWORD: laravel
       MYSQL_USER: laravel
       MYSQL_PASSWORD: laravel
+
+  mailpit:
+    image: axllent/mailpit
+    environment:
+      - TZ=Asia/Jerusalem
+    ports:
+      - 8025:8025
+      - 1025:1025
+    restart: unless-stopped
 
   client:
     build:

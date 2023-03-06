@@ -1,5 +1,3 @@
-import Vue from "vue";
-
 export default async function authenticated({next, store}) {
 	// fetch user
 	if (store.getters["auth/checked"] === false) {

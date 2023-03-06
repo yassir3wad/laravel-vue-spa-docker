@@ -78,7 +78,7 @@
               <b-form-group>
                 <div class="d-flex justify-content-between">
                   <label for="login-password">Password</label>
-                  <b-link :to="{name:'auth-forgot-password-v2'}">
+                  <b-link :to="{name:'forget_password'}">
                     <small>Forgot Password?</small>
                   </b-link>
                 </div>
@@ -130,6 +130,7 @@
                   block
                   @click="submit"
               >
+                <b-spinner v-if="processing" small type="grow"/>
                 Sign in
               </b-button>
             </b-form>
@@ -175,7 +176,7 @@ export default {
   },
   methods: {
     submit() {
-      this.processing = true
+      this.processing = true;
 
       this.$refs.loginValidation.validate().then((success) => {
         if (success) {
@@ -190,8 +191,10 @@ export default {
               .finally(() => {
                 this.processing = false
               });
+        } else {
+          this.processing = false
         }
-      }).finally(() => {
+      }).catch(() => {
         this.processing = false
       })
     },

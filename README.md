@@ -20,6 +20,7 @@
 - Redis
 - i18n
 - Vuex
+- Mailpit (as a test mail driver)
 
 ## How it works
 TBD

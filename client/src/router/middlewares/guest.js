@@ -1,5 +1,3 @@
-import Vue from "vue";
-
 export default async function guest({next, store}) {
 	if (store.getters["auth/checked"] === false) {
 		store.commit("auth/SET_CHECKED")

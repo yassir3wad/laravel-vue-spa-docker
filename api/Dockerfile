@@ -39,16 +39,18 @@ COPY composer*.json ./
 
 RUN if [[ "$MODE" = "production" ]] ; then composer install --no-dev --no-scripts --no-autoloader ; else composer install --no-scripts --no-autoloader ; fi
 
-# Copy existing application directory contents
-COPY . .
-
-RUN composer dump-autoload
 
 # Add user for laravel application
 RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
 RUN chown -R www:www /var/www
+
+
+# Copy existing application directory contents
+COPY . .
+
+RUN composer dump-autoload
 
 # Change current user to www
 USER www
