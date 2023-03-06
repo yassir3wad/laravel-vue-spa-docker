@@ -125,6 +125,7 @@
 
               <!-- submit buttons -->
               <b-button
+                  :disabled="processing"
                   type="submit"
                   variant="primary"
                   block

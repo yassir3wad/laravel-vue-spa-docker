@@ -49,6 +49,7 @@
 
             <!-- submit button -->
             <b-button
+                :disabled="processing"
                 variant="primary"
                 block
                 type="submit"
