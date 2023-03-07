@@ -56,8 +56,8 @@ docker-compose -f docker-compose.yml -f docker-compose.prd.yml up --build
 * [x] Setup Vuexy Template
 * [x] Login
 * [x] Forget & Reset Password
-* [ ] Update Profile Info
-* [ ] Update Password
+* [x] Update Profile Info
+* [x] Update Password
 * [ ] Setup Laravel Permission
 * [ ] Roles Module
 * [ ] Users Module

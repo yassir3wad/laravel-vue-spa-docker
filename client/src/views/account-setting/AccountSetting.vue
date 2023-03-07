@@ -1,10 +1,10 @@
 <template>
   <b-tabs
-    vertical
-    content-class="col-12 col-md-9 mt-1 mt-md-0"
-    pills
-    nav-wrapper-class="col-md-3 col-12"
-    nav-class="nav-left"
+      vertical
+      content-class="col-12 col-md-9 mt-1 mt-md-0"
+      pills
+      nav-wrapper-class="col-md-3 col-12"
+      nav-class="nav-left"
   >
 
     <!-- general tab -->
@@ -12,15 +12,15 @@
       <!-- title -->
       <template #title>
         <feather-icon
-          icon="UserIcon"
-          size="18"
-          class="mr-50"
+            icon="UserIcon"
+            size="18"
+            class="mr-50"
         />
         <span class="font-weight-bold">General</span>
       </template>
 
-      <account-setting-general v-if="$store.getters['auth/user']"
-        :general-data="$store.getters['auth/user']"
+      <account-setting-general v-if="user"
+                               :general-data="user"
       />
     </b-tab>
     <!--/ general tab -->
@@ -31,14 +31,14 @@
       <!-- title -->
       <template #title>
         <feather-icon
-          icon="LockIcon"
-          size="18"
-          class="mr-50"
+            icon="LockIcon"
+            size="18"
+            class="mr-50"
         />
         <span class="font-weight-bold">Change Password</span>
       </template>
 
-      <account-setting-password />
+      <account-setting-password/>
     </b-tab>
     <!--/ change password tab -->
 
@@ -48,16 +48,17 @@
       <!-- title -->
       <template #title>
         <feather-icon
-          icon="InfoIcon"
-          size="18"
-          class="mr-50"
+            icon="InfoIcon"
+            size="18"
+            class="mr-50"
         />
         <span class="font-weight-bold">Information</span>
       </template>
 
-<!--      <account-setting-information-->
-<!--        :information-data="$store.getters['auth/user']"-->
-<!--      />-->
+      <account-setting-information
+          v-if="user"
+          :information-data="user"
+      />
     </b-tab>
   </b-tabs>
 </template>
@@ -66,6 +67,7 @@
 import AccountSettingGeneral from './AccountSettingGeneral.vue'
 import AccountSettingPassword from './AccountSettingPassword.vue'
 import AccountSettingInformation from './AccountSettingInformation.vue'
+import {mapGetters} from 'vuex';
 
 export default {
   components: {
@@ -73,12 +75,10 @@ export default {
     AccountSettingPassword,
     AccountSettingInformation,
   },
-  data() {
-    return {
-      options: {},
-    }
-  },
-  beforeCreate() {
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
   },
 }
 </script>

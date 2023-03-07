@@ -1,7 +1,7 @@
 <template>
   <b-card>
     <validation-observer ref="form">
-      <b-form>
+      <b-form @submit.prevent="submit">
         <b-row>
           <!-- media -->
           <b-media no-body>
@@ -110,7 +110,7 @@
                 v-ripple.400="'rgba(255, 255, 255, 0.15)'"
                 variant="primary"
                 class="mt-2 mr-1"
-                @click="submit"
+                type="submit"
                 :disabled="processing">
 
               <b-spinner v-if="processing" small type="grow"/>
@@ -165,7 +165,7 @@ export default {
           }
 
           formData.append('_method', 'PUT');
-          formData.append('type', 'general');
+          formData.append('type', 'general_setting');
 
           this.$http.post('/api/user/profile-information', formData).then(({data}) => {
             this.$toast.success(data.message);

@@ -7,6 +7,8 @@ services:
         MODE: staging
     volumes:
       - ./api/local.ini:/usr/local/etc/php/conf.d/local.ini
+    env_file:
+      - ./api/.env.stg
 
   mysql:
     environment:

@@ -13,9 +13,8 @@ services:
       - ./api/:/var/www/
       - /var/www/vendor
       - ./api/local.ini:/usr/local/etc/php/conf.d/local.ini
-    environment:
-      - APP_URL=http://localhost:${DOCKER_WEBSERVER_API_PORT:-8000}
-      - CLIENT_APP_URL=http://localhost:${DOCKER_WEBSERVER_CLIENT_PORT:-3000}
+    env_file:
+      - ./api/.env.dev
 
   mysql:
     environment:
@@ -23,6 +22,8 @@ services:
       MYSQL_ROOT_PASSWORD: laravel
       MYSQL_USER: laravel
       MYSQL_PASSWORD: laravel
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
 
   mailpit:
     image: axllent/mailpit
@@ -47,5 +48,5 @@ services:
     volumes:
       - ./client/src/:/app/src/
     environment:
-      - APP_URL=http://localhost:${DOCKER_WEBSERVER_CLIENT_PORT:-3000}
-      - VUE_APP_SERVER_URL=http://localhost:${DOCKER_WEBSERVER_API_PORT:-8000}
+      - APP_URL=http://localhost:${WEBSERVER_CLIENT_PORT:-3000}
+      - VUE_APP_SERVER_URL=http://localhost:${WEBSERVER_API_PORT:-8000}

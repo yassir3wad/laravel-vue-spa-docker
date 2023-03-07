@@ -23,6 +23,7 @@ class UserProfileResource extends JsonResource
 			'image' => $this->image ? Storage::url($this->image) : null,
 			'mobile' => $this->mobile,
 			'bio' => $this->bio,
+			'dob' => $this->dob,
 		];
 	}
 }

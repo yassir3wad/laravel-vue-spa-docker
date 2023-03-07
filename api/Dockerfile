@@ -37,7 +37,10 @@ COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 # Run Composer
 COPY composer*.json ./
 
-RUN if [[ "$MODE" = "production" ]] ; then composer install --no-dev --no-scripts --no-autoloader ; else composer install --no-scripts --no-autoloader ; fi
+RUN if [[ "$MODE" = "production" ]];  \
+    then composer install --no-dev --no-scripts --no-autoloader;  \
+    else composer install --no-scripts --no-autoloader;  \
+    fi
 
 
 # Add user for laravel application

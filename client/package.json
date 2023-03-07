@@ -42,6 +42,7 @@
     "vue-good-table": "2.21.0",
     "vue-i18n": "8.22.2",
     "vue-perfect-scrollbar": "0.2.1",
+    "vue-phone-number-input": "^1.12.13",
     "vue-prism-component": "1.1.1",
     "vue-quill-editor": "3.0.6",
     "vue-ripple-directive": "2.0.1",

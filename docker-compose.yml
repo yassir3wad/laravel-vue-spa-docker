@@ -2,12 +2,13 @@ version: "3.9"
 services:
   webserver:
     image: nginx:alpine
+    restart: unless-stopped
     volumes:
       - ./api/public:/var/www/public:ro
       - ./nginx/conf.d/:/etc/nginx/conf.d/
     ports:
-      - "${DOCKER_WEBSERVER_API_PORT:-8000}:80"
-      - "${DOCKER_WEBSERVER_CLIENT_PORT:-3000}:81"
+      - "${WEBSERVER_API_PORT:-8000}:80"
+      - "${WEBSERVER_CLIENT_PORT:-3000}:81"
     depends_on:
       - api
       - client

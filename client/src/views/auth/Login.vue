@@ -51,7 +51,7 @@
           <validation-observer ref="form">
             <b-form
                 class="auth-login-form mt-2"
-                @submit.prevent
+                @submit.prevent="submit"
             >
               <!-- email -->
               <b-form-group
@@ -65,7 +65,7 @@
                 >
                   <b-form-input
                       id="login-email"
-                      v-model="email"
+                      v-model="form.email"
                       :state="errors.length > 0 ? false:null"
                       name="login-email"
                       placeholder="john@example.com"
@@ -93,7 +93,7 @@
                   >
                     <b-form-input
                         id="login-password"
-                        v-model="password"
+                        v-model="form.password"
                         :state="errors.length > 0 ? false:null"
                         class="form-control-merge"
                         :type="passwordFieldType"
@@ -116,7 +116,8 @@
               <b-form-group>
                 <b-form-checkbox
                     id="remember-me"
-                    v-model="status"
+                    value="1"
+                    v-model="form.remember"
                     name="checkbox-1"
                 >
                   Remember Me
@@ -129,7 +130,6 @@
                   type="submit"
                   variant="primary"
                   block
-                  @click="submit"
               >
                 <b-spinner v-if="processing" small type="grow"/>
                 Sign in
@@ -155,9 +155,11 @@ export default {
   mixins: [togglePasswordVisibility],
   data() {
     return {
-      status: '',
-      password: '',
-      email: '',
+      form: {
+        remember: 0,
+        password: null,
+        email: null,
+      },
       processing: false,
       sideImg: require('@/assets/images/pages/login-v2.svg'),
     }
@@ -181,10 +183,7 @@ export default {
 
       this.$refs.form.validate().then((success) => {
         if (success) {
-          this.$store.dispatch('auth/login', {
-            email: this.email,
-            password: this.password,
-          }).then(() => {
+          this.$store.dispatch('auth/login', this.form).then(() => {
             this.$toast.success(this.$t("Successfully logged in"));
             this.$router.push({name: 'home'});
           })

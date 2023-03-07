@@ -1,138 +1,108 @@
 <template>
   <b-card>
     <!-- form -->
-    <b-form>
-      <b-row>
-        <!-- bio -->
-        <b-col cols="12">
-          <b-form-group
-            label="Bio"
-            label-for="bio-area"
-          >
-            <b-form-textarea
-              id="bio-area"
-              v-model="localOptions.bio"
-              rows="4"
-              placeholder="Your bio data here..."
-            />
-          </b-form-group>
-        </b-col>
-        <!--/ bio -->
+    <validation-observer ref="form">
+      <b-form ref="formRef" @submit.prevent="submit">
+        <b-row>
+          <!-- bio -->
+          <b-col cols="12">
+            <b-form-group
+                label="Bio"
+                label-for="bio-area">
+              <validation-provider
+                  #default="{ errors }"
+                  name="bio"
+                  vid="bio">
+                <b-form-textarea
+                    id="bio-area"
+                    v-model="form.bio"
+                    rows="4"
+                    placeholder="Your bio data here..."
+                    :state="errors.length > 0 ? false : null"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
+          </b-col>
+          <!--/ bio -->
 
-        <!-- birth date -->
-        <b-col md="6">
-          <b-form-group
-            label-for="example-datepicker"
-            label="Birth date"
-          >
-            <flat-pickr
-              v-model="localOptions.dob"
-              class="form-control"
-              name="date"
-              placeholder="Birth date"
-            />
-          </b-form-group>
-        </b-col>
-        <!--/ birth date -->
+          <!-- birth date -->
+          <b-col md="6">
+            <b-form-group
+                label-for="example-datepicker"
+                label="Birth date"
+            >
+              <validation-provider
+                  #default="{ errors }"
+                  name="dob"
+                  vid="dob">
+                <flat-pickr
+                    v-model="form.dob"
+                    class="form-control"
+                    :config="{maxDate: 'today'}"
+                    name="date"
+                    placeholder="Birth date"
+                    :state="errors.length > 0 ? false : null"
+                />
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
+          </b-col>
+          <!--/ birth date -->
 
-        <!-- Country -->
-        <b-col md="6">
-          <b-form-group
-            label-for="countryList"
-            label="Country"
-          >
-            <v-select
-              id="countryList"
-              v-model="localOptions.country"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              label="title"
-              :options="countryOption"
-            />
-          </b-form-group>
-        </b-col>
-        <!--/ Country -->
 
-        <!-- website -->
-        <b-col md="6">
-          <b-form-group
-            label-for="website"
-            label="Website"
-          >
-            <b-form-input
-              id="website"
-              v-model="localOptions.website"
-              placeholder="Website address"
-            />
-          </b-form-group>
-        </b-col>
-        <!--/ website -->
+          <!-- mobile -->
+          <b-col md="6">
+            <b-form-group
+                label-for="mobile"
+                label="Mobile">
+              <validation-provider
+                  #default="{ errors }"
+                  name="mobile"
+                  vid="mobile">
+                <VuePhoneNumberInput :fetch-country="false"
+                                     :no-use-browser-locale="true"  @update="onMobileUpdate" v-model="form.tmp_mobile"
+                                     :error="errors.length > 0 ? true : null"/>
+                <small class="text-danger">{{ errors[0] }}</small>
+              </validation-provider>
+            </b-form-group>
+          </b-col>
+          <!-- mobile -->
 
-        <!-- phone -->
-        <b-col md="6">
-          <b-form-group
-            label-for="phone"
-            label="Phone"
-          >
-            <cleave
-              id="phone"
-              v-model="localOptions.phone"
-              class="form-control"
-              :raw="false"
-              :options="clevePhone"
-              placeholder="Phone number"
-            />
-          </b-form-group>
-        </b-col>
-        <!-- phone -->
+          <b-col cols="12">
+            <b-button
+                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
+                variant="primary"
+                type="submit"
+                class="mt-1 mr-1"
+                :disabled="processing">
 
-        <b-col cols="12">
-          <b-button
-            v-ripple.400="'rgba(255, 255, 255, 0.15)'"
-            variant="primary"
-            class="mt-1 mr-1"
-          >
-            Save changes
-          </b-button>
-          <b-button
-            v-ripple.400="'rgba(186, 191, 199, 0.15)'"
-            type="reset"
-            class="mt-1"
-            variant="outline-secondary"
-            @click.prevent="resetForm"
-          >
-            Reset
-          </b-button>
-        </b-col>
-      </b-row>
-    </b-form>
+              <b-spinner v-if="processing" small type="grow"/>
+
+              Save changes
+            </b-button>
+          </b-col>
+        </b-row>
+      </b-form>
+    </validation-observer>
   </b-card>
 </template>
 
 <script>
-import {
-  BButton, BForm, BFormGroup, BFormInput, BRow, BCol, BCard, BFormTextarea,
-} from 'bootstrap-vue'
-import vSelect from 'vue-select'
 import flatPickr from 'vue-flatpickr-component'
 import Ripple from 'vue-ripple-directive'
 import Cleave from 'vue-cleave-component'
-
 // eslint-disable-next-line import/no-extraneous-dependencies
-import 'cleave.js/dist/addons/cleave-phone.us'
+import 'cleave.js/dist/addons/cleave-phone.ps'
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 
+// TODO: API for counties and enable dropdown
 export default {
   components: {
-    BButton,
-    BForm,
-    BFormGroup,
-    BFormInput,
-    BRow,
-    BCol,
-    BCard,
-    BFormTextarea,
-    vSelect,
     flatPickr,
     Cleave,
+    VuePhoneNumberInput
   },
   directives: {
     Ripple,
@@ -140,28 +110,47 @@ export default {
   props: {
     informationData: {
       type: Object,
-      default: () => {},
     },
   },
   data() {
     return {
-      countryOption: ['USA', 'India', 'Canada'],
-      localOptions: JSON.parse(JSON.stringify(this.informationData)),
-      clevePhone: {
-        phone: true,
-        phoneRegionCode: 'US',
+      form: {
+        bio: this.informationData.bio,
+        dob: this.informationData.dob,
+        tmp_mobile: this.informationData.mobile,
+        mobile: this.informationData.mobile,
       },
+      processing: false
     }
   },
   methods: {
-    resetForm() {
-      this.localOptions = JSON.parse(JSON.stringify(this.informationData))
+    submit() {
+      this.processing = true;
+      this.$refs.form.validate().then((success) => {
+        if (success) {
+          this.$http.put('/api/user/profile-information', Object.assign(this.form, {type: 'information'})).then(({data}) => {
+            this.$toast.success(data.message);
+            this.$store.dispatch('auth/user');
+          })
+              .catch(error => this.handleResponseError(error, this.$refs.form))
+              .finally(() => {
+                this.processing = false
+              });
+        } else {
+          this.processing = false
+        }
+      }).catch(() => {
+        this.processing = false
+      })
+
     },
+    onMobileUpdate(e) {
+      this.form.mobile = e.formattedNumber;
+    }
   },
 }
 </script>
 
 <style lang="scss">
-@import '@core/scss/vue/libs/vue-select.scss';
 @import '@core/scss/vue/libs/vue-flatpicker.scss';
 </style>
