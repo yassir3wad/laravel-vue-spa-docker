@@ -28,11 +28,15 @@ TBD
 ### Development Environment
 it includes compiling and hot-reloading for development
 ```
+cp api/.env.dev.example api/.env.dev
+
+// then =>
+
 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 ```
-- To access api open http://localhost:8000
-- To access client open http://localhost:3000
-- To access Mailpit open http://localhost:8025
+- To access the api open http://localhost:8000
+- To access the client open http://localhost:3000
+- To access the Mailpit open http://localhost:8025
 
 ### Staging Environment
 Compiles and minifies for staging
