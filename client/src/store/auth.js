@@ -21,18 +21,18 @@ export default {
 		async generateCsrfToken() {
 			return await Vue.prototype.$http.get('/sanctum/csrf-cookie');
 		}, async login({commit, dispatch}, form) {
-			await Vue.prototype.$http.post('/login', form);
+			await Vue.prototype.$http.post('/api/login', form);
 			return dispatch('user');
 		}, async user({commit}) {
 			return await Vue.prototype.$http.get('/api/user').then(({data}) => {
-				commit('SET_USER', data)
+				commit('SET_USER', data.data)
 			}).catch(() => {
 				commit('SET_USER', null)
 			}).finally(() => {
 				commit('SET_CHECKED', true)
 			});
 		}, logout({commit}) {
-			return Vue.prototype.$http.post('/logout').finally(() => {
+			return Vue.prototype.$http.post('/api/logout').finally(() => {
 				commit('SET_USER', null);
 			});
 		}

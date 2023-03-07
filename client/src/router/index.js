@@ -60,6 +60,21 @@ const router = new VueRouter({
 			},
 		},
 		{
+			path: '/profile',
+			name: 'profile',
+			component: () => import('@/views/account-setting/AccountSetting.vue'),
+			meta: {
+				middleware: [ensureCsrfTokenSet, authenticated],
+				title: 'Profile',
+				breadcrumb: [
+					{
+						text: 'Profile',
+						active: true,
+					},
+				],
+			},
+		},
+		{
 			path: '/error-404',
 			name: 'error-404',
 			component: () => import('@/views/error/Error404.vue'),
@@ -76,9 +91,10 @@ const router = new VueRouter({
 
 router.beforeEach(middleware({store}))
 
-// router.beforeEach(async (to, from, next) => {
-// 	document.title = to.meta.title;
-// })
+router.beforeEach(async (to, from, next) => {
+	document.title = to.meta.title;
+	next();
+})
 
 
 // ? For splash screen

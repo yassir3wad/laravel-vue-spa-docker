@@ -171,7 +171,7 @@ export default {
 
       this.$refs.form.validate().then((success) => {
         if (success) {
-          this.$http.post('/reset-password', this.form).then(({data}) => {
+          this.$http.post('/api/reset-password', this.form).then(({data}) => {
             this.$toast.success(data.message);
             this.$router.push({name: 'login'});
           })

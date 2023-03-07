@@ -48,7 +48,7 @@
           </b-card-text>
 
           <!-- form -->
-          <validation-observer ref="loginValidation">
+          <validation-observer ref="form">
             <b-form
                 class="auth-login-form mt-2"
                 @submit.prevent
@@ -179,7 +179,7 @@ export default {
     submit() {
       this.processing = true;
 
-      this.$refs.loginValidation.validate().then((success) => {
+      this.$refs.form.validate().then((success) => {
         if (success) {
           this.$store.dispatch('auth/login', {
             email: this.email,
@@ -188,7 +188,7 @@ export default {
             this.$toast.success(this.$t("Successfully logged in"));
             this.$router.push({name: 'home'});
           })
-              .catch(error => this.handleResponseError(error, this.$refs.loginValidation))
+              .catch(error => this.handleResponseError(error, this.$refs.form))
               .finally(() => {
                 this.processing = false
               });

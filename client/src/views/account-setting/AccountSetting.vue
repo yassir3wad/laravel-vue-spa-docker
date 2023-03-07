@@ -9,7 +9,6 @@
 
     <!-- general tab -->
     <b-tab active>
-
       <!-- title -->
       <template #title>
         <feather-icon
@@ -20,9 +19,8 @@
         <span class="font-weight-bold">General</span>
       </template>
 
-      <account-setting-general
-        v-if="options.general"
-        :general-data="options.general"
+      <account-setting-general v-if="$store.getters['auth/user']"
+        :general-data="$store.getters['auth/user']"
       />
     </b-tab>
     <!--/ general tab -->
@@ -57,69 +55,23 @@
         <span class="font-weight-bold">Information</span>
       </template>
 
-      <account-setting-information
-        v-if="options.info"
-        :information-data="options.info"
-      />
-    </b-tab>
-
-    <!-- social links -->
-    <b-tab>
-
-      <!-- title -->
-      <template #title>
-        <feather-icon
-          icon="LinkIcon"
-          size="18"
-          class="mr-50"
-        />
-        <span class="font-weight-bold">Social</span>
-      </template>
-
-      <account-setting-social
-        v-if="options.social"
-        :social-data="options.social"
-      />
-    </b-tab>
-
-    <!-- notification -->
-    <b-tab>
-
-      <!-- title -->
-      <template #title>
-        <feather-icon
-          icon="BellIcon"
-          size="18"
-          class="mr-50"
-        />
-        <span class="font-weight-bold">Notifications</span>
-      </template>
-
-      <account-setting-notification
-        v-if="options.notification"
-        :notification-data="options.notification"
-      />
+<!--      <account-setting-information-->
+<!--        :information-data="$store.getters['auth/user']"-->
+<!--      />-->
     </b-tab>
   </b-tabs>
 </template>
 
 <script>
-import { BTabs, BTab } from 'bootstrap-vue'
 import AccountSettingGeneral from './AccountSettingGeneral.vue'
 import AccountSettingPassword from './AccountSettingPassword.vue'
 import AccountSettingInformation from './AccountSettingInformation.vue'
-import AccountSettingSocial from './AccountSettingSocial.vue'
-import AccountSettingNotification from './AccountSettingNotification.vue'
 
 export default {
   components: {
-    BTabs,
-    BTab,
     AccountSettingGeneral,
     AccountSettingPassword,
     AccountSettingInformation,
-    AccountSettingSocial,
-    AccountSettingNotification,
   },
   data() {
     return {
@@ -127,7 +79,6 @@ export default {
     }
   },
   beforeCreate() {
-    this.$http.get('/account-setting/data').then(res => { this.options = res.data })
   },
 }
 </script>

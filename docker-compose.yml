@@ -3,7 +3,7 @@ services:
   webserver:
     image: nginx:alpine
     volumes:
-      - ./api/:/var/www/
+      - ./api/public:/var/www/public:ro
       - ./nginx/conf.d/:/etc/nginx/conf.d/
     ports:
       - "${DOCKER_WEBSERVER_API_PORT:-8000}:80"

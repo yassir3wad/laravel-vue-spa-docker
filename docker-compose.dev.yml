@@ -1,6 +1,10 @@
 version: "3.9"
 name: "spa-dev"
 services:
+  webserver:
+    volumes:
+      - ./api/storage/app/public:/var/www/public/storage/:ro
+
   api:
     build:
       args:
@@ -10,7 +14,9 @@ services:
       - /var/www/vendor
       - ./api/local.ini:/usr/local/etc/php/conf.d/local.ini
     environment:
+      - APP_URL=http://localhost:${DOCKER_WEBSERVER_API_PORT:-8000}
       - CLIENT_APP_URL=http://localhost:${DOCKER_WEBSERVER_CLIENT_PORT:-3000}
+
   mysql:
     environment:
       MYSQL_DATABASE: laravel

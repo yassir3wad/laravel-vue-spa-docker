@@ -93,7 +93,7 @@ export default {
 
       this.$refs.form.validate().then((success) => {
         if (success) {
-          this.$http.post('/forgot-password', {
+          this.$http.post('/api/forgot-password', {
             email: this.email
           }).then(({data}) => {
             this.$toast.success(data.message);

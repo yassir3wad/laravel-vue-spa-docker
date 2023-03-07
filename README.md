@@ -9,6 +9,7 @@
 [![Lint PHP](https://github.com/fumeapp/laranuxt/actions/workflows/lint-php.yml/badge.svg)](https://github.com/fumeapp/laranuxt/actions/workflows/lint-php.yml)
 
 ## Technology
+- PHP-FPM 8.1
 - Laravel 10
 - Vue, Vuex, i18n
 - [Vuexy Theme](https://themeforest.net/item/vuexy-vuejs-html-laravel-admin-dashboard-template/23328599)
@@ -29,6 +30,9 @@ it includes compiling and hot-reloading for development
 ```
 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 ```
+- To access api open http://localhost:8000
+- To access client open http://localhost:3000
+- To access Mailpit open http://localhost:8025
 
 ### Staging Environment
 Compiles and minifies for staging

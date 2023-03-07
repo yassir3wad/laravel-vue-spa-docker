@@ -29,20 +29,22 @@
       >
         <template #button-content>
           <div class="d-sm-flex d-none user-nav">
-            <p v-if="$store.getters['auth/user']" class="user-name font-weight-bolder mb-0">{{ $store.getters['auth/user'].name }}</p>
+            <p v-if="user" class="user-name font-weight-bolder mb-0">
+              {{ user.name }}</p>
             <span class="user-status">Admin</span>
           </div>
           <b-avatar
+              v-if="user"
               size="40"
               variant="light-primary"
               badge
-              :src="require('@/assets/images/avatars/13-small.png')"
+              :src="user.image"
               class="badge-minimal"
               badge-variant="success"
           />
         </template>
 
-        <b-dropdown-item link-class="d-flex align-items-center">
+        <b-dropdown-item link-class="d-flex align-items-center" :to="{name: 'profile'}">
           <feather-icon
               size="16"
               icon="UserIcon"
@@ -51,23 +53,24 @@
           <span>Profile</span>
         </b-dropdown-item>
 
-        <b-dropdown-item link-class="d-flex align-items-center">
-          <feather-icon
-              size="16"
-              icon="CheckSquareIcon"
-              class="mr-50"
-          />
-          <span>Task</span>
-        </b-dropdown-item>
+        <!--        <b-dropdown-item link-class="d-flex align-items-center">-->
+        <!--          <feather-icon-->
+        <!--              size="16"-->
+        <!--              icon="MailIcon"-->
+        <!--              class="mr-50"-->
+        <!--          />-->
+        <!--          <span>Inbox</span>-->
+        <!--        </b-dropdown-item>-->
 
-        <b-dropdown-item link-class="d-flex align-items-center">
-          <feather-icon
-              size="16"
-              icon="MessageSquareIcon"
-              class="mr-50"
-          />
-          <span>Chat</span>
-        </b-dropdown-item>
+
+        <!--        <b-dropdown-item link-class="d-flex align-items-center">-->
+        <!--          <feather-icon-->
+        <!--              size="16"-->
+        <!--              icon="MessageSquareIcon"-->
+        <!--              class="mr-50"-->
+        <!--          />-->
+        <!--          <span>Chat</span>-->
+        <!--        </b-dropdown-item>-->
 
         <b-dropdown-divider/>
 
@@ -87,6 +90,7 @@
 <script>
 import DarkToggler from '@core/layouts/components/app-navbar/components/DarkToggler.vue'
 import {initialAbility} from "@/libs/acl/config";
+import {mapGetters} from 'vuex'
 
 export default {
   components: {
@@ -100,11 +104,16 @@ export default {
       },
     },
   },
+  computed: {
+    ...mapGetters({
+      user: 'auth/user'
+    })
+  },
   methods: {
     logout() {
       this.$store.dispatch('auth/logout').finally(() => {
         // this.$ability.update(initialAbility)
-        this.$router.push({ name: 'login' })
+        this.$router.push({name: 'login'})
       });
     }
   }
