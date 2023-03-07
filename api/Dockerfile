@@ -1,7 +1,6 @@
 FROM php:8.1.16-fpm
 
 ARG MODE=development
-
 ENV APP_ENV=$MODE
 
 # Set working directory
@@ -32,31 +31,20 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
 # Install composer
-COPY --from=composer /usr/bin/composer /usr/local/bin/composer
-
-# Run Composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 COPY composer*.json ./
 
 RUN if [[ "$MODE" = "production" ]];  \
-    then composer install --no-dev --no-scripts --no-autoloader;  \
-    else composer install --no-scripts --no-autoloader;  \
+    then composer install --no-dev --no-scripts --no-autoloader --ansi --no-interaction;  \
+    else composer install --no-scripts --no-autoloader --ansi --no-interaction;  \
     fi
 
 
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
-
-RUN chown -R www:www /var/www
-
-
-# Copy existing application directory contents
 COPY . .
 
-RUN composer dump-autoload
-
-# Change current user to www
-USER www
+RUN composer dump-autoload -o \
+    && chown -R :www-data /var/www \
+    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000

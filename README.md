@@ -58,9 +58,9 @@ docker-compose -f docker-compose.yml -f docker-compose.prd.yml up --build
 * [x] Forget & Reset Password
 * [x] Update Profile Info
 * [x] Update Password
+* [x] Setup Laravel Permission
 * [ ] Setup Scheduler
 * [ ] Setup Queue/Workers
-* [ ] Setup Laravel Permission
 * [ ] Roles Module
 * [ ] Users Module
 * [ ] Social Login
