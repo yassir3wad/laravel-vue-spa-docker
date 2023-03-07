@@ -58,13 +58,15 @@ docker-compose -f docker-compose.yml -f docker-compose.prd.yml up --build
 * [x] Forget & Reset Password
 * [x] Update Profile Info
 * [x] Update Password
+* [ ] Setup Scheduler
+* [ ] Setup Queue/Workers
 * [ ] Setup Laravel Permission
 * [ ] Roles Module
 * [ ] Users Module
 * [ ] Social Login
 * [ ] Settings Module
-* [ ] Notifications Module
-* [ ] Chat Module
+* [ ] Realtime Notifications Module
+* [ ] Realtime Chat Module
 
 ## Contributing
 Contributions are **welcome** and will be fully **credited**.
