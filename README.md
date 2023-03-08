@@ -63,10 +63,11 @@ docker-compose -f docker-compose.yml -f docker-compose.prd.yml up --build
 * [x] Update Profile Info
 * [x] Update Password
 * [x] Setup Laravel Permission
-* [ ] Setup Scheduler
-* [ ] Setup Queue/Workers
 * [ ] Roles Module
 * [ ] Users Module
+* [ ] Setup Scheduler
+* [ ] Setup Queue/Workers
+* [ ] Setup Horizon
 * [ ] Social Login
 * [ ] Settings Module
 * [ ] Realtime Notifications Module
