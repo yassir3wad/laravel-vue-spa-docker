@@ -70,8 +70,8 @@ docker-compose -f docker-compose.yml -f docker-compose.prd.yml up --build
 * [ ] Setup Horizon
 * [ ] Social Login
 * [ ] Settings Module
-* [ ] Realtime Notifications Module
-* [ ] Realtime Chat Module
+* [ ] Real Time Notifications Module
+* [ ] Real Time Chat Module
 
 ## Contributing
 Contributions are **welcome** and will be fully **credited**.
