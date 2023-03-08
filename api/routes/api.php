@@ -17,5 +17,10 @@ use App\Http\Controllers\Dashboard\ProfileController;
 
 Route::middleware('auth:sanctum')->group(function () {
 	Route::get('/user', [ProfileController::class, 'me']);
+	Route::get('users', function () {
+		return \App\Http\Resources\Dashboard\UserProfileResource::collection(
+			\App\Models\User::orderBy(\request('sort'), \request('sort_dir'))->paginate(\request('per_page'))
+		);
+	});
 });
 

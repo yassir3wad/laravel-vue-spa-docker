@@ -8,6 +8,59 @@ import authenticated from './middlewares/authenticated';
 
 Vue.use(VueRouter)
 
+const routes = [];
+const modules = [
+	{name: 'users', singular: 'user'},
+];
+modules.forEach(function (item) {
+	routes.push({
+		path: '/' + item.name,
+		name: `${item.name}.index`,
+		meta: {
+			middleware: [ensureCsrfTokenSet, authenticated],
+			title: 'Users',
+			resource: item.name,
+			permission: {
+				parent: item.name,
+				action: 'can_view',
+			},
+			breadcrumb: [
+				{
+					text: 'Users',
+					active: true,
+				}
+			]
+		},
+		component: () => import(`@/views/pages/${item.name}/List.vue`),
+	});
+
+	// routes.push({
+	// 	path: `/${item.name}/add`,
+	// 	name: `add-${item.singular}`,
+	// 	meta: {
+	// 		resource: item.name,
+	// 		permission: {
+	// 			parent: item.name,
+	// 			action: 'can_create',
+	// 		},
+	// 	},
+	// 	component: () => import(`@/view/pages/${item.name}/form.vue`),
+	// });
+	//
+	// routes.push({
+	// 	path: `/${item.name}/:resourceId`,
+	// 	name: `edit-${item.singular}`,
+	// 	meta: {
+	// 		resource: item.name,
+	// 		permission: {
+	// 			parent: item.name,
+	// 			action: 'can_update',
+	// 		},
+	// 	},
+	// 	component: () => import(`@/view/pages/${item.name}/form.vue`),
+	// });
+});
+
 const router = new VueRouter({
 	mode: 'history',
 	base: process.env.BASE_URL,
@@ -74,6 +127,7 @@ const router = new VueRouter({
 				],
 			},
 		},
+		...routes,
 		{
 			path: '/error-404',
 			name: 'error-404',

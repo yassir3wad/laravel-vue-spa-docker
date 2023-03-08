@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
 				'password' => bcrypt(123123),
 				'email_verified_at' => null,
 				'username' => 'john23',
-				'image' => 'https://api.multiavatar.com/John Doe.png',
+//				'image' => 'https://api.multiavatar.com/John Doe.png',
 			]
 		);
 	}

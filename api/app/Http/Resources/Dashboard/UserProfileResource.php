@@ -24,6 +24,8 @@ class UserProfileResource extends JsonResource
 			'mobile' => $this->mobile,
 			'bio' => $this->bio,
 			'dob' => $this->dob,
+			'created_at' => $this->created_at->format('Y-m-d h:i a'),
+			'updated_at' => $this->updated_at->format('Y-m-d h:i a'),
 		];
 	}
 }

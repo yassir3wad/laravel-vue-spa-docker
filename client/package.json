@@ -23,6 +23,7 @@
     "express": "^4.18.2",
     "jsonwebtoken": "8.5.1",
     "leaflet": "1.6.0",
+    "lodash": "^4.17.21",
     "portal-vue": "2.1.7",
     "postcss-rtl": "1.7.3",
     "prismjs": "1.19.0",
