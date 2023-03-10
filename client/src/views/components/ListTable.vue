@@ -39,7 +39,7 @@
         empty-text="No matching records found"
         striped
         :sort-by.sync="internalSort.column"
-        :sort-desc.sync="internalSort.isSortDirAsc"
+        :sort-desc.sync="internalSort.isSortDirDesc"
     >
 
       <template v-for="(_, name) in $scopedSlots" #[name]="data">
@@ -127,14 +127,10 @@
 
 <script>
 
-import vSelect from 'vue-select'
 import {debounce} from 'lodash';
 
 export default {
   name: "list-table",
-  components: {
-    vSelect
-  },
   props: {
     columns: {
       type: Array,
@@ -173,7 +169,7 @@ export default {
       processing: false,
       internalSort: {
         column: 'created_at',
-        isSortDirAsc: false
+        isSortDirDesc: true
       },
       pagination: {
         page: 1,
@@ -189,7 +185,6 @@ export default {
   methods: {
     fetchData(ctx, callback) {
       if (this.processing === true) return false;
-      console.log(this.internalSort)
       this.processing = true;
       this.$http.get(this.getApiUrl()).then(({data}) => {
         this.pagination.total = data.meta.total;
@@ -226,7 +221,7 @@ export default {
       });
 
       if (this.internalSort.column) {
-        api += `&sort=${this.internalSort.column}&sort_dir=${this.internalSort.isSortDirAsc === true ? 'asc' : 'desc'}`
+        api += `&sort=${this.internalSort.column}&sort_dir=${this.internalSort.isSortDirDesc === true ? 'desc' : 'asc'}`
       }
 
       return api;
@@ -246,7 +241,7 @@ export default {
       deep: true,
       handler: (newVal) => {
         this.internalSort.column = newVal.column;
-        this.internalSort.isSortDirAsc = newVal.direction === 'desc';
+        this.internalSort.isSortDirDesc = newVal.direction === 'desc';
       }
     },
   },

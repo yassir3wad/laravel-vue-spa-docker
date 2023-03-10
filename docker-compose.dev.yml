@@ -2,6 +2,7 @@ version: "3.9"
 name: "spa-dev"
 services:
   webserver:
+    command: "nginx-debug -g 'daemon off;'"
     volumes:
       - ./api/storage/app/public:/var/www/public/storage/:ro
 

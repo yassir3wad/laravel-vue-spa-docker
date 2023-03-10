@@ -34,19 +34,31 @@ modules.forEach(function (item) {
 		component: () => import(`@/views/pages/${item.name}/List.vue`),
 	});
 
-	// routes.push({
-	// 	path: `/${item.name}/add`,
-	// 	name: `add-${item.singular}`,
-	// 	meta: {
-	// 		resource: item.name,
-	// 		permission: {
-	// 			parent: item.name,
-	// 			action: 'can_create',
-	// 		},
-	// 	},
-	// 	component: () => import(`@/view/pages/${item.name}/form.vue`),
-	// });
-	//
+	routes.push({
+		path: `/${item.name}/create`,
+		name: `${item.name}.create`,
+		meta: {
+			middleware: [ensureCsrfTokenSet, authenticated],
+			title: 'Create User',
+			resource: item.name,
+			permission: {
+				parent: item.name,
+				action: 'can_create',
+			},
+			breadcrumb: [
+				{
+					text: 'Users',
+					active: true,
+				},
+				{
+					text: 'Create',
+					active: true,
+				}
+			]
+		},
+		component: () => import(`@/views/pages/${item.name}/Form.vue`),
+	});
+
 	// routes.push({
 	// 	path: `/${item.name}/:resourceId`,
 	// 	name: `edit-${item.singular}`,

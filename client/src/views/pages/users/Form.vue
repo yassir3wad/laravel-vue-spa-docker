@@ -1,384 +1,262 @@
 <template>
-
-  <div>
-
-    <user-list-add-new
-      :is-add-new-user-sidebar-active.sync="isAddNewUserSidebarActive"
-      :role-options="roleOptions"
-      :plan-options="planOptions"
-      @refetch-data="refetchData"
-    />
-
-    <b-card no-body>
-      <b-card-header class="pb-50">
-        <h5>
-          Filters
-        </h5>
-      </b-card-header>
-      <b-card-body>
-        <b-row>
-          <b-col
-              cols="12"
-              md="4"
-              class="mb-md-0 mb-2"
-          >
-            <label>Role</label>
-            <v-select
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :value="roleFilter"
-                :options="roleOptions"
-                class="w-100"
-                :reduce="val => val.value"
-                @input="(val) => $emit('update:roleFilter', val)"
-            />
-          </b-col>
-          <b-col
-              cols="12"
-              md="4"
-              class="mb-md-0 mb-2"
-          >
-            <label>Plan</label>
-            <v-select
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :value="planFilter"
-                :options="planOptions"
-                class="w-100"
-                :reduce="val => val.value"
-                @input="(val) => $emit('update:planFilter', val)"
-            />
-          </b-col>
-          <b-col
-              cols="12"
-              md="4"
-              class="mb-md-0 mb-2"
-          >
-            <label>Status</label>
-            <v-select
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                :value="statusFilter"
-                :options="statusOptions"
-                class="w-100"
-                :reduce="val => val.value"
-                @input="(val) => $emit('update:statusFilter', val)"
-            />
-          </b-col>
-        </b-row>
-      </b-card-body>
-    </b-card>
-
-
-    <!-- Table Container Card -->
-    <b-card
-      no-body
-      class="mb-0"
-    >
-
-      <div class="m-2">
-
-        <!-- Table Top -->
-        <b-row>
-
-          <!-- Per Page -->
-          <b-col
+  <validation-observer ref="form">
+    <b-form ref="formRef" @submit.prevent="submit">
+      <b-row>
+        <b-col
             cols="12"
-            md="6"
-            class="d-flex align-items-center justify-content-start mb-1 mb-md-0"
-          >
-            <label>Show</label>
-            <v-select
-              v-model="perPage"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-              :options="perPageOptions"
-              :clearable="false"
-              class="per-page-selector d-inline-block mx-50"
-            />
-            <label>entries</label>
-          </b-col>
+            xl="9">
+          <b-card>
+            <b-row>
+              <!-- email -->
+              <b-col cols="6">
+                <b-form-group
+                    label="Email"
+                    label-for="vi-email"
+                >
+                  <validation-provider
+                      #default="{ errors }"
+                      name="email"
+                      rules="required|email"
+                  >
+                    <b-input-group class="input-group-merge">
+                      <b-input-group-prepend is-text>
+                        <feather-icon icon="MailIcon"/>
+                      </b-input-group-prepend>
+                      <b-form-input
+                          id="vi-email"
+                          v-model="form.email"
+                          type="email"
+                          :state="errors.length > 0 ? false:null"
+                          placeholder="Email"
+                      />
+                    </b-input-group>
+                    <small class="text-danger">{{ errors[0] }}</small>
+                  </validation-provider>
+                </b-form-group>
+              </b-col>
 
-          <!-- Search -->
-          <b-col
+
+              <b-col cols="6">
+                <b-form-group
+                    label="Username"
+                    label-for="vi-username"
+                >
+                  <validation-provider
+                      #default="{ errors }"
+                      name="username"
+                      vid="username"
+                      rules="required|alpha_num"
+                  >
+                    <b-input-group class="input-group-merge">
+                      <b-input-group-prepend is-text>
+                        <feather-icon icon="UserCheckIcon"/>
+                      </b-input-group-prepend>
+                      <b-form-input
+                          id="vi-username"
+                          placeholder="Username"
+                          v-model="form.username"
+                          name="username"
+                          :state="errors.length > 0 ? false:null"
+                      />
+                    </b-input-group>
+                    <small class="text-danger">{{ errors[0] }}</small>
+                  </validation-provider>
+                </b-form-group>
+              </b-col>
+
+
+              <!-- mobile -->
+              <b-col cols="6">
+                <b-form-group
+                    label-for="mobile"
+                    label="Mobile">
+                  <validation-provider
+                      #default="{ errors }"
+                      name="mobile"
+                      vid="mobile">
+                    <VuePhoneNumberInput :fetch-country="false"
+                                         :no-use-browser-locale="true" @update="onMobileUpdate"
+                                         v-model="form.tmp_mobile"
+                                         :error="errors.length > 0 ? true : null"/>
+                    <small class="text-danger">{{ errors[0] }}</small>
+                  </validation-provider>
+                </b-form-group>
+              </b-col>
+
+              <b-col cols="6">
+                <b-form-group
+                    label="Role"
+                    label-for="vi-role">
+                  <v-select
+                      :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                      :options="roleOptions"
+                      class="w-100"
+                  />
+                </b-form-group>
+              </b-col>
+
+              <!-- password -->
+              <b-col cols="6">
+                <b-form-group
+                    label="Password"
+                    label-for="vi-password"
+                >
+                  <validation-provider
+                      #default="{ errors }"
+                      name="password" vid="password" rules="required">
+                    <b-input-group class="input-group-merge">
+                      <b-input-group-prepend is-text>
+                        <feather-icon icon="LockIcon"/>
+                      </b-input-group-prepend>
+                      <b-form-input
+                          id="vi-password"
+                          type="password"
+                          v-model="form.password"
+                          :state="errors.length > 0 ? false:null"
+                          placeholder="Password"
+                      />
+                    </b-input-group>
+                    <small class="text-danger">{{ errors[0] }}</small>
+                  </validation-provider>
+                </b-form-group>
+              </b-col>
+
+              <b-col cols="6">
+                <b-form-group
+                    label="Password Confirmation"
+                    label-for="vi-password-confirmation"
+                >
+                  <validation-provider
+                      #default="{ errors }"
+                      name="new password" vid="password_confirmation" rules="required|confirmed:password">
+                    <b-input-group class="input-group-merge">
+                      <b-input-group-prepend is-text>
+                        <feather-icon icon="LockIcon"/>
+                      </b-input-group-prepend>
+                      <b-form-input
+                          id="vi-password-confirmation"
+                          type="password"
+                          v-model="form.password_confirmation"
+                          :state="errors.length > 0 ? false:null"
+                          placeholder="Password Confirmation"
+                      />
+                    </b-input-group>
+                    <small class="text-danger">{{ errors[0] }}</small>
+                  </validation-provider>
+                </b-form-group>
+              </b-col>
+
+              <b-col cols="6">
+                <validation-provider
+                    #default="{ errors }"
+                    name="files"
+                    rules="required"
+                    vid="files">
+                  <file-uploader :errors="errors" v-model="form.image" server-key="users"></file-uploader>
+                </validation-provider>
+              </b-col>
+            </b-row>
+          </b-card>
+        </b-col>
+
+        <b-col
             cols="12"
-            md="6"
-          >
-            <div class="d-flex align-items-center justify-content-end">
-              <b-form-input
-                v-model="searchQuery"
-                class="d-inline-block mr-1"
-                placeholder="Search..."
-              />
-              <b-button
+            xl="3"
+            class="mt-md-0 mt-2">
+          <b-card>
+
+            <!-- Button: Send Invoice -->
+            <b-button
+                v-ripple.400="'rgba(255, 255, 255, 0.15)'"
                 variant="primary"
-                @click="isAddNewUserSidebarActive = true"
-              >
-                <span class="text-nowrap">Add User</span>
-              </b-button>
-            </div>
-          </b-col>
-        </b-row>
-
-      </div>
-
-      <b-table
-        ref="refUserListTable"
-        class="position-relative"
-        :items="fetchUsers"
-        responsive
-        :fields="tableColumns"
-        primary-key="id"
-        :sort-by.sync="sortBy"
-        show-empty
-        empty-text="No matching records found"
-        :sort-desc.sync="isSortDirDesc"
-      >
-
-        <!-- Column: User -->
-        <template #cell(user)="data">
-          <b-media vertical-align="center">
-            <template #aside>
-              <b-avatar
-                size="32"
-                :src="data.item.avatar"
-                :text="avatarText(data.item.fullName)"
-                :variant="`light-${resolveUserRoleVariant(data.item.role)}`"
-                :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
-              />
-            </template>
-            <b-link
-              :to="{ name: 'apps-users-view', params: { id: data.item.id } }"
-              class="font-weight-bold d-block text-nowrap"
+                class="mb-75"
+                block
             >
-              {{ data.item.fullName }}
-            </b-link>
-            <small class="text-muted">@{{ data.item.username }}</small>
-          </b-media>
-        </template>
-
-        <!-- Column: Role -->
-        <template #cell(role)="data">
-          <div class="text-nowrap">
-            <feather-icon
-              :icon="resolveUserRoleIcon(data.item.role)"
-              size="18"
-              class="mr-50"
-              :class="`text-${resolveUserRoleVariant(data.item.role)}`"
-            />
-            <span class="align-text-top text-capitalize">{{ data.item.role }}</span>
-          </div>
-        </template>
-
-        <!-- Column: Status -->
-        <template #cell(status)="data">
-          <b-badge
-            pill
-            :variant="`light-${resolveUserStatusVariant(data.item.status)}`"
-            class="text-capitalize"
-          >
-            {{ data.item.status }}
-          </b-badge>
-        </template>
-
-        <!-- Column: Actions -->
-        <template #cell(actions)="data">
-          <b-dropdown
-            variant="link"
-            no-caret
-            :right="$store.state.appConfig.isRTL"
-          >
-
-            <template #button-content>
-              <feather-icon
-                icon="MoreVerticalIcon"
-                size="16"
-                class="align-middle text-body"
-              />
-            </template>
-            <b-dropdown-item :to="{ name: 'apps-users-view', params: { id: data.item.id } }">
-              <feather-icon icon="FileTextIcon" />
-              <span class="align-middle ml-50">Details</span>
-            </b-dropdown-item>
-
-            <b-dropdown-item :to="{ name: 'apps-users-edit', params: { id: data.item.id } }">
-              <feather-icon icon="EditIcon" />
-              <span class="align-middle ml-50">Edit</span>
-            </b-dropdown-item>
-
-            <b-dropdown-item>
-              <feather-icon icon="TrashIcon" />
-              <span class="align-middle ml-50">Delete</span>
-            </b-dropdown-item>
-          </b-dropdown>
-        </template>
-
-      </b-table>
-      <div class="mx-2 mb-2">
-        <b-row>
-
-          <b-col
-            cols="12"
-            sm="6"
-            class="d-flex align-items-center justify-content-center justify-content-sm-start"
-          >
-            <span class="text-muted">Showing {{ dataMeta.from }} to {{ dataMeta.to }} of {{ dataMeta.of }} entries</span>
-          </b-col>
-          <!-- Pagination -->
-          <b-col
-            cols="12"
-            sm="6"
-            class="d-flex align-items-center justify-content-center justify-content-sm-end"
-          >
-
-            <b-pagination
-              v-model="currentPage"
-              :total-rows="totalUsers"
-              :per-page="perPage"
-              first-number
-              last-number
-              class="mb-0 mt-1 mt-sm-0"
-              prev-class="prev-item"
-              next-class="next-item"
-            >
-              <template #prev-text>
-                <feather-icon
-                  icon="ChevronLeftIcon"
-                  size="18"
-                />
-              </template>
-              <template #next-text>
-                <feather-icon
-                  icon="ChevronRightIcon"
-                  size="18"
-                />
-              </template>
-            </b-pagination>
-
-          </b-col>
-
-        </b-row>
-      </div>
-    </b-card>
-  </div>
+              Save
+            </b-button>
+          </b-card>
+        </b-col>
+      </b-row>
+    </b-form>
+  </validation-observer>
 </template>
 
 <script>
-import vSelect from 'vue-select'
-import store from '@/store'
-import { ref, onUnmounted } from '@vue/composition-api'
-import { avatarText } from '@core/utils/filter'
-import UsersListFilters from './UsersListFilters.vue'
-import useUsersList from './useUsersList'
-import userStoreModule from '../userStoreModule'
-import UserListAddNew from './UserListAddNew.vue'
+
+import Ripple from 'vue-ripple-directive'
+import VuePhoneNumberInput from 'vue-phone-number-input';
+import 'vue-phone-number-input/dist/vue-phone-number-input.css';
+import {useInputImageRenderer} from '@core/comp-functions/forms/form-utils'
+import {ref} from "@vue/composition-api";
+import FileUploader from "@/views/components/FileUploader";
 
 export default {
   components: {
-    UsersListFilters,
-    UserListAddNew,
-    vSelect,
+    FileUploader,
+    VuePhoneNumberInput
   },
-  setup() {
-    const USER_APP_STORE_MODULE_NAME = 'app-user'
-
-    // Register module
-    if (!store.hasModule(USER_APP_STORE_MODULE_NAME)) store.registerModule(USER_APP_STORE_MODULE_NAME, userStoreModule)
-
-    // UnRegister on leave
-    onUnmounted(() => {
-      if (store.hasModule(USER_APP_STORE_MODULE_NAME)) store.unregisterModule(USER_APP_STORE_MODULE_NAME)
-    })
-
-    const isAddNewUserSidebarActive = ref(false)
-
-    const roleOptions = [
-      { label: 'Admin', value: 'admin' },
-      { label: 'Author', value: 'author' },
-      { label: 'Editor', value: 'editor' },
-      { label: 'Maintainer', value: 'maintainer' },
-      { label: 'Subscriber', value: 'subscriber' },
-    ]
-
-    const planOptions = [
-      { label: 'Basic', value: 'basic' },
-      { label: 'Company', value: 'company' },
-      { label: 'Enterprise', value: 'enterprise' },
-      { label: 'Team', value: 'team' },
-    ]
-
-    const statusOptions = [
-      { label: 'Pending', value: 'pending' },
-      { label: 'Active', value: 'active' },
-      { label: 'Inactive', value: 'inactive' },
-    ]
-
-    const {
-      fetchUsers,
-      tableColumns,
-      perPage,
-      currentPage,
-      totalUsers,
-      dataMeta,
-      perPageOptions,
-      searchQuery,
-      sortBy,
-      isSortDirDesc,
-      refUserListTable,
-      refetchData,
-
-      // UI
-      resolveUserRoleVariant,
-      resolveUserRoleIcon,
-      resolveUserStatusVariant,
-
-      // Extra Filters
-      roleFilter,
-      planFilter,
-      statusFilter,
-    } = useUsersList()
-
+  directives: {
+    Ripple,
+  },
+  data() {
     return {
-
-      // Sidebar
-      isAddNewUserSidebarActive,
-
-      fetchUsers,
-      tableColumns,
-      perPage,
-      currentPage,
-      totalUsers,
-      dataMeta,
-      perPageOptions,
-      searchQuery,
-      sortBy,
-      isSortDirDesc,
-      refUserListTable,
-      refetchData,
-
-      // Filter
-      avatarText,
-
-      // UI
-      resolveUserRoleVariant,
-      resolveUserRoleIcon,
-      resolveUserStatusVariant,
-
-      roleOptions,
-      planOptions,
-      statusOptions,
-
-      // Extra Filters
-      roleFilter,
-      planFilter,
-      statusFilter,
+      form: {
+        email: null,
+        mobile: null,
+        username: null,
+        password: null,
+        password_confirmation: null,
+        image: [
+          {
+            url: 'http://localhost:8000/storage/users/QoMsO2tMPx9nCBD5WqgorI3PGBzcixoZtaZ3wLBt.png',
+            path: 'users/QoMsO2tMPx9nCBD5WqgorI3PGBzcixoZtaZ3wLBt.png'
+          }
+        ],
+      },
+      profileFile: null,
+      processing: false,
     }
   },
+  methods: {
+    onMobileUpdate(e) {
+      this.form.mobile = e.formattedNumber;
+    },
+    submit() {
+      this.processing = true;
+
+      this.$refs.form.validate().then((success) => {
+        if (success) {
+        } else {
+          this.processing = false
+        }
+      }).catch(() => {
+        this.processing = false
+      })
+    }
+  },
+  setup() {
+    const roleOptions = [
+      {label: 'Admin', value: 'admin'},
+      {label: 'Author', value: 'author'},
+      {label: 'Editor', value: 'editor'},
+      {label: 'Maintainer', value: 'maintainer'},
+      {label: 'Subscriber', value: 'subscriber'},
+    ];
+
+    const refInputEl = ref(null);
+    const previewEl = ref(null);
+    const cb = (rawImage) => {
+      previewEl.value.setAttribute('src', rawImage);
+    }
+
+    const {inputImageRenderer} = useInputImageRenderer(refInputEl, cb)
+
+    return {
+      roleOptions,
+      refInputEl,
+      previewEl,
+      inputImageRenderer,
+    };
+  }
 }
 </script>
-
-<style lang="scss" scoped>
-.per-page-selector {
-  width: 90px;
-}
-</style>
-
-<style lang="scss">
-@import '@core/scss/vue/libs/vue-select.scss';
-</style>

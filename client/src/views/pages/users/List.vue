@@ -87,13 +87,11 @@
 </template>
 
 <script>
-import vSelect from 'vue-select'
 import {avatarText} from '@core/utils/filter'
 import ListTable from '../../components/ListTable';
 
 export default {
   components: {
-    vSelect,
     ListTable,
   },
   data() {
@@ -176,8 +174,4 @@ export default {
 .per-page-selector {
   width: 90px;
 }
-</style>
-
-<style lang="scss">
-@import '@core/scss/vue/libs/vue-select.scss';
 </style>

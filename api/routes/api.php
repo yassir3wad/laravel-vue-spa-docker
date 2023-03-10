@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\ProfileController;
+use App\Http\Controllers\Dashboard\UploadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +16,8 @@ use App\Http\Controllers\Dashboard\ProfileController;
 */
 
 Route::middleware('auth:sanctum')->group(function () {
+	Route::post('/files', [UploadController::class, 'store']);
+
 	Route::get('/user', [ProfileController::class, 'me']);
 	Route::get('users', function () {
 		return \App\Http\Resources\Dashboard\UserProfileResource::collection(
