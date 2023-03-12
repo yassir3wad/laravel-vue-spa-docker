@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-
 use App\Enums\ActiveStatusEnum;
 use App\Models\User;
 use Illuminate\Contracts\Hashing\Hasher;
@@ -17,9 +16,6 @@ class UserService
 	 */
 	private User $model;
 
-	/**
-	 * @var FileUploaderService
-	 */
 	private FileUploaderService $uploaderService;
 
 	/**
@@ -63,7 +59,7 @@ class UserService
 	/**
 	 * @param array $attributes
 	 *
-	 * @return User
+	 * @return
 	 * @throws \InvalidArgumentException
 	 */
 	public function createUser(array $attributes): User

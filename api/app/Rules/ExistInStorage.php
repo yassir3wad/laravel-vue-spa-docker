@@ -16,7 +16,9 @@ class ExistInStorage implements ValidationRule
 	 */
 	public function validate(string $attribute, mixed $value, Closure $fail): void
 	{
-		if (Url::isValidUrl($value) || Storage::has($value)) return;
+		if (Url::isValidUrl($value) || Storage::has($value)) {
+			return;
+		}
 
 		$fail(trans('validation.file', ['attribute' => trans("validation.attributes.$attribute")]));
 	}

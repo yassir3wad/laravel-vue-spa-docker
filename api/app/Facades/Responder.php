@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\Facade;
 
 class Responder extends Facade
 {
-	protected static function getFacadeAccessor()
-	{
-		return \App\Utils\Responder::class;
-	}
+    protected static function getFacadeAccessor()
+    {
+        return \App\Utils\Responder::class;
+    }
 }

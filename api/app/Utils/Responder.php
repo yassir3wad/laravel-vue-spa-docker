@@ -7,121 +7,127 @@ use Illuminate\Support\Arr;
 
 class Responder
 {
-	private $status;
-	private $status_code;
-	private $locale;
-	private $data;
-	private $errors;
-	private $message;
-	private $others;
+    private $status;
 
-	public function __construct()
-	{
-		$this->status = 'ok';
-		$this->status_code = 200;
-		$this->locale = app()->getLocale();
-		$this->data = null;
-		$this->errors = null;
-		$this->message = null;
-		$this->others = [];
-	}
+    private $status_code;
 
-	public function setOthers($data = [])
-	{
-		$this->others = $data;
+    private $locale;
 
-		return $this;
-	}
+    private $data;
 
-	public function setErrors($errors)
-	{
-		$this->errors = $errors;
+    private $errors;
 
-		return $this;
-	}
+    private $message;
 
-	public function setStatus($status)
-	{
-		$this->status = $status;
+    private $others;
 
-		return $this;
-	}
+    public function __construct()
+    {
+        $this->status = 'ok';
+        $this->status_code = 200;
+        $this->locale = app()->getLocale();
+        $this->data = null;
+        $this->errors = null;
+        $this->message = null;
+        $this->others = [];
+    }
 
-	public function asError()
-	{
-		return $this->setErrors('error');
-	}
+    public function setOthers($data = [])
+    {
+        $this->others = $data;
 
-	public function setStatusCode($status_code)
-	{
-		$this->status_code = $status_code;
+        return $this;
+    }
 
-		return $this;
-	}
+    public function setErrors($errors)
+    {
+        $this->errors = $errors;
 
-	public function getStatusCode()
-	{
-		return $this->status_code;
-	}
+        return $this;
+    }
 
-	public function setData($data)
-	{
-		$this->data = $data;
+    public function setStatus($status)
+    {
+        $this->status = $status;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function setMessage($message, $replace = [])
-	{
-		$this->message = trans($message, $replace);
+    public function asError()
+    {
+        return $this->setErrors('error');
+    }
 
-		return $this;
-	}
+    public function setStatusCode($status_code)
+    {
+        $this->status_code = $status_code;
 
-	public function addData($name, $value)
-	{
-		$this->data[$name] = $value;
+        return $this;
+    }
 
-		return $this;
-	}
+    public function getStatusCode()
+    {
+        return $this->status_code;
+    }
 
-	public function setPaginatedData($data)
-	{
-		$data = (array)$data->response(request())->getData();
+    public function setData($data)
+    {
+        $this->data = $data;
 
-		$this->data = Arr::get($data, 'data');
-		$this->others['meta'] = Arr::except((array)$data['meta'], ['links']);
+        return $this;
+    }
 
-		return $this;
-	}
+    public function setMessage($message, $replace = [])
+    {
+        $this->message = trans($message, $replace);
 
-	public function makeApiError($message = "", $replace = [], $data = [], $status_code = 200)
-	{
-		return $this->setStatus('ng')
-			->setMessage($message, $replace)
-			->setData($data)
-			->setStatusCode($status_code);
-	}
+        return $this;
+    }
 
-	public function throw($message, $statusCode = 400)
-	{
-		$this->setMessage($message)->setStatusCode($statusCode)->setStatus('ng');
+    public function addData($name, $value)
+    {
+        $this->data[$name] = $value;
 
-		throw new ResponderException($this);
-	}
+        return $this;
+    }
 
-	/**
-	 * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-	 */
-	public function respond()
-	{
-		return response(array_merge([
-			'status' => $this->status,
-			'status_code' => $this->status_code,
-			'locale' => $this->locale,
-			'message' => $this->message,
-			'data' => $this->data,
-			'errors' => $this->errors,
-		], $this->others), $this->status_code);
-	}
+    public function setPaginatedData($data)
+    {
+        $data = (array) $data->response(request())->getData();
+
+        $this->data = Arr::get($data, 'data');
+        $this->others['meta'] = Arr::except((array) $data['meta'], ['links']);
+
+        return $this;
+    }
+
+    public function makeApiError($message = '', $replace = [], $data = [], $status_code = 200)
+    {
+        return $this->setStatus('ng')
+            ->setMessage($message, $replace)
+            ->setData($data)
+            ->setStatusCode($status_code);
+    }
+
+    public function throw($message, $statusCode = 400)
+    {
+        $this->setMessage($message)->setStatusCode($statusCode)->setStatus('ng');
+
+        throw new ResponderException($this);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
+    public function respond()
+    {
+        return response(array_merge([
+            'status' => $this->status,
+            'status_code' => $this->status_code,
+            'locale' => $this->locale,
+            'message' => $this->message,
+            'data' => $this->data,
+            'errors' => $this->errors,
+        ], $this->others), $this->status_code);
+    }
 }

@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
-	public function me()
-	{
-		return new UserProfileResource(Auth::user());
-	}
+    public function me()
+    {
+        return new UserProfileResource(Auth::user());
+    }
 }
