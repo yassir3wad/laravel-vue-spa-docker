@@ -60,6 +60,10 @@ export default {
       return this.downImg
     },
   },
+  mounted() {
+    document.title = 404;
+  }
+
 }
 </script>
 

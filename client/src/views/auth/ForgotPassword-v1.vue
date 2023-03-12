@@ -62,7 +62,7 @@
         </validation-observer>
 
         <b-card-text class="text-center mt-2">
-          <b-link :to="{name:'auth-login-v1'}">
+          <b-link :to="{name:'login'}">
             <feather-icon icon="ChevronLeftIcon"/>
             Back to login
           </b-link>
@@ -109,6 +109,9 @@ export default {
         this.processing = false
       })
     },
+  },
+  mounted() {
+      document.title = this.$t('Forget Password');
   },
 }
 </script>

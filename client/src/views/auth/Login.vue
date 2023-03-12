@@ -199,6 +199,9 @@ export default {
       })
     },
   },
+  mounted() {
+    document.title = this.$t('Login');
+  },
 }
 </script>
 

@@ -130,7 +130,6 @@
 
 <script>
 import VuexyLogo from '@core/layouts/components/Logo.vue'
-import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
 
 export default {
   components: {
@@ -187,6 +186,9 @@ export default {
       })
     },
   },
+  mounted() {
+    document.title = this.$t('Reset Password');
+  }
 }
 </script>
 

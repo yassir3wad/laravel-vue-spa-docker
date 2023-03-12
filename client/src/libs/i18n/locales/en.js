@@ -185,6 +185,8 @@ export default {
 	"Save": "Save",
 	"Is Active": "Is Active?",
 	"Home": "Home",
+	"Login": "Login",
+	"Forget Password": "Forget Password",
 	"Drop File": "Drop file here or <span class='filepond--label-action'>Browse</span>",
 	model_filters: (ctx) => `${ctx.named('model')} Filters:`,
 	add_model: (ctx) => `Add ${ctx.named('model')}`,
