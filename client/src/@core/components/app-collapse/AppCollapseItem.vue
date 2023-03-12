@@ -33,18 +33,9 @@
 </template>
 
 <script>
-import {
-  BCard, BCardHeader, BCardBody, BCollapse,
-} from 'bootstrap-vue'
 import { v4 as uuidv4 } from 'uuid'
 
 export default {
-  components: {
-    BCard,
-    BCardHeader,
-    BCardBody,
-    BCollapse,
-  },
   props: {
     isVisible: {
       type: Boolean,

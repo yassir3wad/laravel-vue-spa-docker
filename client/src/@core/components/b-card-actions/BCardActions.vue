@@ -58,20 +58,11 @@
 </template>
 
 <script>
-import {
-  BCard, BCardTitle, BCardSubTitle, BCardBody, BCollapse, BOverlay,
-} from 'bootstrap-vue'
 import BCardActionsContainer from './BCardActionsContainer.vue'
 
 export default {
   components: {
     BCardActionsContainer,
-    BCard,
-    BCardTitle,
-    BCardSubTitle,
-    BCardBody,
-    BCollapse,
-    BOverlay,
   },
   inheritAttrs: false,
   props: {

@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import { BCard, BCardBody, BAvatar } from 'bootstrap-vue'
 import VueApexCharts from 'vue-apexcharts'
 import { $themeColors } from '@themeConfig'
 import { lineChartOptions } from './chartOptions'
@@ -38,9 +37,6 @@ import { lineChartOptions } from './chartOptions'
 export default {
   components: {
     VueApexCharts,
-    BCard,
-    BCardBody,
-    BAvatar,
   },
   props: {
     icon: {

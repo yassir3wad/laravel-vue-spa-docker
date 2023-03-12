@@ -9,7 +9,7 @@ export const $themeBreakpoints = {}
 // APP CONFIG
 export const $themeConfig = {
   app: {
-    appName: 'Vuexy', // Will update name in navigation menu (Branding)
+    appName: 'Lara Vuexy', // Will update name in navigation menu (Branding)
     // eslint-disable-next-line global-require
     appLogoImage: require('@/assets/images/logo/logo.svg'), // Will update logo in navigation menu (Branding)
   },
@@ -26,12 +26,12 @@ export const $themeConfig = {
     navbar: {
       // ? For horizontal menu, navbar type will work for navMenu type
       type: 'floating', // static , sticky , floating, hidden
-      backgroundColor: '', // BS color options [primary, success, etc]
+      backgroundColor: 'primary', // BS color options [primary, success, etc]
     },
     footer: {
       type: 'static', // static, sticky, hidden
     },
-    customizer: true,
+    customizer: false,
     enableScrollToTop: true,
   },
 }

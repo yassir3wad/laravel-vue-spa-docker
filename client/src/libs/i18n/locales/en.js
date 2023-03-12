@@ -203,6 +203,13 @@ export default {
 			edit_user: 'Edit User',
 			users: 'Users',
 			user: 'User',
+		},
+		roles: {
+			create_role: 'Create Role',
+			edit_role: 'Edit Role',
+			roles: 'Roles',
+			role: 'Role',
 		}
+
 	}
 };

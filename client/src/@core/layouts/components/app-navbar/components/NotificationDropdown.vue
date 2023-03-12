@@ -105,22 +105,12 @@
 </template>
 
 <script>
-import {
-  BNavItemDropdown, BBadge, BMedia, BLink, BAvatar, BButton, BFormCheckbox,
-} from 'bootstrap-vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import Ripple from 'vue-ripple-directive'
 
 export default {
   components: {
-    BNavItemDropdown,
-    BBadge,
-    BMedia,
-    BLink,
-    BAvatar,
     VuePerfectScrollbar,
-    BButton,
-    BFormCheckbox,
   },
   directives: {
     Ripple,

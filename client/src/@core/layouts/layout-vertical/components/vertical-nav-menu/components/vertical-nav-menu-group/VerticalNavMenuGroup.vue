@@ -1,49 +1,48 @@
 <template>
   <li
-    v-if="canViewVerticalNavMenuGroup(item)"
-    class="nav-item has-sub"
-    :class="{
+      v-if="canViewVerticalNavMenuGroup(item)"
+      class="nav-item has-sub"
+      :class="{
       'open': isOpen,
       'disabled': item.disabled,
       'sidebar-group-active': isActive,
     }"
   >
     <b-link
-      class="d-flex align-items-center"
-      @click="() => updateGroupOpen(!isOpen)"
+        class="d-flex align-items-center"
+        @click="() => updateGroupOpen(!isOpen)"
     >
-      <feather-icon :icon="item.icon || 'CircleIcon'" />
+      <feather-icon :icon="item.icon || 'CircleIcon'"/>
       <span class="menu-title text-truncate">{{ t(item.title) }}</span>
       <b-badge
-        v-if="item.tag"
-        pill
-        :variant="item.tagVariant || 'primary'"
-        class="mr-1 ml-auto"
+          v-if="item.tag"
+          pill
+          :variant="item.tagVariant || 'primary'"
+          class="mr-1 ml-auto"
       >
         {{ item.tag }}
       </b-badge>
     </b-link>
     <b-collapse
-      v-model="isOpen"
-      class="menu-content"
-      tag="ul"
+        v-model="isOpen"
+        class="menu-content"
+        tag="ul"
     >
       <component
-        :is="resolveNavItemComponent(child)"
-        v-for="child in item.children"
-        :key="child.header || child.title"
-        ref="groupChild"
-        :item="child"
+          :is="resolveNavItemComponent(child)"
+          v-for="child in item.children"
+          :key="child.header || child.title"
+          ref="groupChild"
+          :item="child"
       />
     </b-collapse>
   </li>
 </template>
 
 <script>
-import { BLink, BBadge, BCollapse } from 'bootstrap-vue'
-import { resolveVerticalNavMenuItemComponent as resolveNavItemComponent } from '@core/layouts/utils'
-import { useUtils as useI18nUtils } from '@core/libs/i18n'
-import { useUtils as useAclUtils } from '@core/libs/acl'
+import {resolveVerticalNavMenuItemComponent as resolveNavItemComponent} from '@core/layouts/utils'
+import {useUtils as useI18nUtils} from '@core/libs/i18n'
+import {useUtils as useAclUtils} from '@core/libs/acl'
 import VerticalNavMenuHeader from '../vertical-nav-menu-header'
 import VerticalNavMenuLink from '../vertical-nav-menu-link/VerticalNavMenuLink.vue'
 
@@ -56,9 +55,6 @@ export default {
   components: {
     VerticalNavMenuHeader,
     VerticalNavMenuLink,
-    BLink,
-    BBadge,
-    BCollapse,
   },
   mixins: [mixinVerticalNavMenuGroup],
   props: {
@@ -75,8 +71,10 @@ export default {
       updateIsActive,
     } = useVerticalNavMenuGroup(props.item)
 
-    const { t } = useI18nUtils()
-    const { canViewVerticalNavMenuGroup } = useAclUtils()
+    const {t} = useI18nUtils()
+    // TODO: revert after acel
+    // const { canViewVerticalNavMenuGroup } = useAclUtils()
+    const canViewVerticalNavMenuGroup = () => true;
 
     return {
       resolveNavItemComponent,

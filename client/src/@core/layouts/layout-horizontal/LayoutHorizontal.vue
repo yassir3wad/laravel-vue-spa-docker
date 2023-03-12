@@ -103,7 +103,6 @@ import AppNavbarHorizontalLayout from '@core/layouts/components/app-navbar/AppNa
 import AppNavbarHorizontalLayoutBrand from '@core/layouts/components/app-navbar/AppNavbarHorizontalLayoutBrand.vue'
 import AppFooter from '@core/layouts/components/AppFooter.vue'
 import useAppConfig from '@core/app-config/useAppConfig'
-import { BNavbar } from 'bootstrap-vue'
 import { useScrollListener } from '@core/comp-functions/misc/event-listeners'
 
 import { onUnmounted } from '@vue/composition-api'
@@ -129,8 +128,6 @@ export default {
     AppNavbarHorizontalLayoutBrand,
     AppFooter,
     HorizontalNavMenu,
-
-    BNavbar,
 
     // Content Renderer
     LayoutContentRendererDefault,

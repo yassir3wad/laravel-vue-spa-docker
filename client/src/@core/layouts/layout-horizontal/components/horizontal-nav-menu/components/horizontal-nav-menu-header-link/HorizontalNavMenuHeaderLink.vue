@@ -18,16 +18,12 @@
 </template>
 
 <script>
-import { BLink } from 'bootstrap-vue'
 import { useUtils as useI18nUtils } from '@core/libs/i18n'
 import { useUtils as useAclUtils } from '@core/libs/acl'
 import useHorizontalNavMenuHeaderLink from './useHorizontalNavMenuHeaderLink'
 import mixinHorizontalNavMenuHeaderLink from './mixinHorizontalNavMenuHeaderLink'
 
 export default {
-  components: {
-    BLink,
-  },
   mixins: [mixinHorizontalNavMenuHeaderLink],
   props: {
     item: {

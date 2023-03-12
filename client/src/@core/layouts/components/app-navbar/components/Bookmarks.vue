@@ -59,7 +59,7 @@
               class="mr-75"
               size="18"
             />
-            <span class="align-middle">{{ suggestion.title }}</span>
+            <span class="align-middle">{{ $t(suggestion.title) }}</span>
             <feather-icon
               icon="StarIcon"
               class="ml-auto"
@@ -82,9 +82,6 @@
 </template>
 
 <script>
-import {
-  BNavbarNav, BNavItem, BTooltip, BNavItemDropdown, BFormInput, BDropdownItem,
-} from 'bootstrap-vue'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import useAutoSuggest from '@core/components/app-auto-suggest/useAutoSuggest'
 import { ref, watch } from '@vue/composition-api'
@@ -94,7 +91,7 @@ import searchAndBookmarkData from '../search-and-bookmark-data'
 
 export default {
   components: {
-    BNavbarNav, BNavItem, BTooltip, BNavItemDropdown, BFormInput, VuePerfectScrollbar, BDropdownItem,
+   VuePerfectScrollbar
   },
   setup() {
     const searchAndBookmarkDataPages = ref(searchAndBookmarkData.pages)

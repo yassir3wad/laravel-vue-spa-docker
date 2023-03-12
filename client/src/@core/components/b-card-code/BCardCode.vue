@@ -60,20 +60,12 @@
 </template>
 
 <script>
-import {
-  BCard, BCardTitle, BCardSubTitle, BCardBody, BCollapse,
-} from 'bootstrap-vue'
 import 'prismjs'
 import 'prismjs/themes/prism-tomorrow.css'
 import Prism from 'vue-prism-component'
 
 export default {
   components: {
-    BCard,
-    BCardTitle,
-    BCardSubTitle,
-    BCardBody,
-    BCollapse,
     Prism,
   },
   inheritAttrs: false,

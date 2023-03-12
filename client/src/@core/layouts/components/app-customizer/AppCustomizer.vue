@@ -178,21 +178,12 @@
 </template>
 
 <script>
-import {
-  BLink, BFormRadioGroup, BFormGroup, BFormCheckbox,
-} from 'bootstrap-vue'
 import vSelect from 'vue-select'
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import useAppCustomizer from './useAppCustomizer'
 
 export default {
   components: {
-    // BSV
-    BLink,
-    BFormRadioGroup,
-    BFormCheckbox,
-    BFormGroup,
-
     // 3rd party
     vSelect,
     VuePerfectScrollbar,

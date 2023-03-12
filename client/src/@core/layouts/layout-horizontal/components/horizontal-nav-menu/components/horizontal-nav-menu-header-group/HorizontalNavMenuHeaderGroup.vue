@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import { BLink } from 'bootstrap-vue'
 import { resolveHorizontalNavMenuItemComponent } from '@core/layouts/utils'
 import { useUtils as useAclUtils } from '@core/libs/acl'
 import { useUtils as useI18nUtils } from '@core/libs/i18n'
@@ -40,7 +39,6 @@ import HorizontalNavMenuLink from '../horizontal-nav-menu-link/HorizontalNavMenu
 
 export default {
   components: {
-    BLink,
     HorizontalNavMenuGroup,
     HorizontalNavMenuLink,
   },

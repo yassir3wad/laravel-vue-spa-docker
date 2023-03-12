@@ -20,13 +20,7 @@
 </template>
 
 <script>
-import { BCard, BAvatar } from 'bootstrap-vue'
-
 export default {
-  components: {
-    BCard,
-    BAvatar,
-  },
   props: {
     icon: {
       type: String,

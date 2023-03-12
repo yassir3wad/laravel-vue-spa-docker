@@ -31,14 +31,8 @@
 </template>
 
 <script>
-import { BNavItemDropdown, BDropdownItem, BImg } from 'bootstrap-vue'
 
 export default {
-  components: {
-    BNavItemDropdown,
-    BDropdownItem,
-    BImg,
-  },
   // ! Need to move this computed property to comp function once we get to Vue 3
   computed: {
     currentLocale() {
@@ -54,20 +48,10 @@ export default {
         name: 'English',
       },
       {
-        locale: 'fr',
-        img: require('@/assets/images/flags/fr.png'),
-        name: 'French',
-      },
-      {
-        locale: 'de',
-        img: require('@/assets/images/flags/de.png'),
-        name: 'German',
-      },
-      {
-        locale: 'pt',
-        img: require('@/assets/images/flags/pt.png'),
-        name: 'Portuguese',
-      },
+        locale: 'ar',
+        img: require('@/assets/images/flags/ar.png'),
+        name: 'العربية',
+      }
     ]
     /* eslint-disable global-require */
 
