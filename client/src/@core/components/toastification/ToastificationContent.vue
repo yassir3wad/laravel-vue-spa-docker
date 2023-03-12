@@ -22,7 +22,7 @@
           <small
             v-if="text"
             class="d-inline-block text-body"
-            v-text="text"
+            v-html="text"
           />
         </div>
         <span

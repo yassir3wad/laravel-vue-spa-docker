@@ -290,7 +290,7 @@ export default {
           }
 
           this.$http.post('/api/users' + (this.id ? `/${this.id}` : ''), formData).then(({data}) => {
-            this.$toast.success(data.message);
+            this.softToast('success', this.$t('Success'), data.message, 'CheckIcon')
             this.$router.push({name: 'users.index'});
           })
               .catch(error => this.handleResponseError(error, this.$refs.form))

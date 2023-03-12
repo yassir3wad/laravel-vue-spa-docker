@@ -168,7 +168,7 @@ export default {
           formData.append('type', 'general_setting');
 
           this.$http.post('/api/user/profile-information', formData).then(({data}) => {
-            this.$toast.success(data.message);
+            this.softToast('success', this.$t('Success'), data.message, 'CheckIcon')
             this.$store.dispatch('auth/user');
           })
               .catch(error => this.handleResponseError(error, this.$refs.form))

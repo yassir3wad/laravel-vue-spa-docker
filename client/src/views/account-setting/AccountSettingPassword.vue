@@ -174,7 +174,7 @@ export default {
       this.$refs.form.validate().then((success) => {
         if (success) {
           this.$http.put('/api/user/password', this.form).then(({data}) => {
-            this.$toast.success(data.message);
+            this.softToast('success', this.$t('Success'), data.message, 'CheckIcon')
             this.reset();
           })
               .catch(error => this.handleResponseError(error, this.$refs.form))

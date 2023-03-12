@@ -184,7 +184,7 @@ export default {
       this.$refs.form.validate().then((success) => {
         if (success) {
           this.$store.dispatch('auth/login', this.form).then(() => {
-            this.$toast.success(this.$t("Successfully logged in"));
+            this.softToast('success', this.$t('Success'), this.$t("Successfully logged in"), 'CheckIcon')
             this.$router.push({name: 'home'});
           })
               .catch(error => this.handleResponseError(error, this.$refs.form))

@@ -96,7 +96,7 @@ export default {
           this.$http.post('/api/forgot-password', {
             email: this.email
           }).then(({data}) => {
-            this.$toast.success(data.message);
+            this.softToast('success', this.$t('Success'), data.message, 'CheckIcon')
           })
               .catch(error => this.handleResponseError(error, this.$refs.form))
               .finally(() => {

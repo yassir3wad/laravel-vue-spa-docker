@@ -1,3 +1,5 @@
+import ToastificationContent from '@core/components/toastification/ToastificationContent'
+
 export default {
 	methods: {
 		handleResponseError(error, ref) {
@@ -41,5 +43,17 @@ export default {
 				autoHideDelay: 5000,
 			});
 		},
+		softToast(variant, title, message, icon = 'BellIcon') {
+			this.$toast({
+				component: ToastificationContent,
+				props: {
+					title: title,
+					icon: icon,
+					text: message,
+					variant: variant
+				},
+			}, {icon: false, closeButton: false});
+
+		}
 	}
 }
