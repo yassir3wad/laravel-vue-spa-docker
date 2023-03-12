@@ -41,7 +41,7 @@
               >
                 <b-input-group
                     class="input-group-merge"
-                    :class="errors.length > 0 ? 'is-invalid':null"
+                    :class="errors.length > 0 ? 'is-invalid' : ''"
                 >
                   <b-form-input
                       id="reset-password-new"

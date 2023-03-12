@@ -37,7 +37,7 @@
                       name="email"
                       rules="required|email"
                   >
-                    <b-input-group class="input-group-merge">
+                    <b-input-group class="input-group-merge" :class="errors.length > 0 ? 'is-invalid' : ''">
                       <b-input-group-prepend is-text>
                         <feather-icon icon="MailIcon"/>
                       </b-input-group-prepend>
@@ -66,7 +66,7 @@
                       vid="username"
                       rules="required|alpha_num"
                   >
-                    <b-input-group class="input-group-merge">
+                    <b-input-group class="input-group-merge" :class="errors.length > 0 ? 'is-invalid' : ''">
                       <b-input-group-prepend is-text>
                         <feather-icon icon="UserCheckIcon"/>
                       </b-input-group-prepend>
@@ -132,7 +132,7 @@
                   <validation-provider
                       #default="{ errors }"
                       name="password" vid="password" rules="required">
-                    <b-input-group class="input-group-merge">
+                    <b-input-group class="input-group-merge" :class="errors.length > 0 ? 'is-invalid' : ''">
                       <b-input-group-prepend is-text>
                         <feather-icon icon="LockIcon"/>
                       </b-input-group-prepend>
@@ -157,7 +157,7 @@
                   <validation-provider
                       #default="{ errors }"
                       name="new password" vid="password_confirmation" rules="required|confirmed:password">
-                    <b-input-group class="input-group-merge">
+                    <b-input-group class="input-group-merge" :class="errors.length > 0 ? 'is-invalid' : ''">
                       <b-input-group-prepend is-text>
                         <feather-icon icon="LockIcon"/>
                       </b-input-group-prepend>
