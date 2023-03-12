@@ -306,25 +306,27 @@ export default {
     }
   },
   created() {
-    this.$http.get(`/api/users/${this.id}`).then(response => {
-      const data = response.data.data;
-      this.$nextTick(() => {
-        this.form = {
-          name: data.name,
-          email: data.email,
-          mobile: data.mobile,
-          username: data.username,
-          role_id: data.role_id,
-          status: data.status,
-          image: data.image,
-        };
-      });
-    }).catch(error => this.handleResponseError(error));
+    if (this.id) {
+      this.$http.get(`/api/users/${this.id}`).then(response => {
+        const data = response.data.data;
+        this.$nextTick(() => {
+          this.form = {
+            name: data.name,
+            email: data.email,
+            mobile: data.mobile,
+            username: data.username,
+            role_id: data.role_id,
+            status: data.status,
+            image: data.image,
+          };
+        });
+      }).catch(this.handleResponseError);
+    }
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [
       {text: this.$t('modules.users.users'), to: {name: 'users.index'}},
-      {text: this.id ? this.$t('modules.users.edit_user') : this.$t('modules.users.create_user'), active: true}
+      {text: this.id ? this.$t('modules.users.edit') : this.$t('modules.users.create'), active: true}
     ]);
   },
   setup() {

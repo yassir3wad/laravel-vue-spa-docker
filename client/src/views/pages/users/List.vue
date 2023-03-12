@@ -11,7 +11,6 @@
                  class="mt-2">
             <label>Name</label>
             <b-form-input
-                id="full-name"
                 v-model="filters.name.value"
                 trim
                 class="w-100"
@@ -23,7 +22,6 @@
                  class="mt-2">
             <label>Email</label>
             <b-form-input
-                id="full-name"
                 v-model="filters.email.value"
                 trim
                 class="w-100"
@@ -89,19 +87,30 @@
           {{ data.item.status_value }}
         </b-badge>
       </template>
+
+      <template #custom_dropdown_actions="{ item }">
+        <b-dropdown-item v-if="item.actions.can_reset_password" @click="openResetPasswordModal(item)">
+          <feather-icon icon="UnlockIcon"/>
+          <span class="align-middle ml-50">{{ $t('Reset Password') }}</span>
+        </b-dropdown-item>
+      </template>
+
     </list-table>
 
+    <reset-password-modal v-model="showResetPasswordModal" :user.sync="currentRow"></reset-password-modal>
   </div>
 </template>
 
 <script>
 import {avatarText} from '@core/utils/filter'
 import ListTable from '../../components/ListTable';
+import ResetPasswordModal from '../../components/modals/ResetPasswordModal';
 import {SET_BREADCRUMB} from "@/store/breadcrumbs.store";
 
 export default {
   components: {
     ListTable,
+    ResetPasswordModal
   },
   data() {
     return {
@@ -130,7 +139,9 @@ export default {
             return this.value?.value;
           }
         },
-      }
+      },
+      showResetPasswordModal: false,
+      currentRow: null,
     };
   },
   computed: {
@@ -165,6 +176,12 @@ export default {
     this.$store.dispatch(SET_BREADCRUMB, [
       {text: this.$t('modules.users.users'), active: true}
     ]);
+  },
+  methods: {
+    openResetPasswordModal(row) {
+      this.showResetPasswordModal = true;
+      this.currentRow = row;
+    }
   },
   setup() {
     const resolveUserStatusVariant = status => {

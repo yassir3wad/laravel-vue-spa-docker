@@ -17,10 +17,10 @@
         </b-col>
 
         <!-- Search -->
-        <b-col cols="12" md="6" v-if="actions.create">
+        <b-col cols="12" md="6" v-if="canCreate">
           <div class="d-flex align-items-center justify-content-end">
-            <b-button variant="primary" @click="$router.push({name: 'users.create'})">
-              <span class="text-nowrap">Add User</span>
+            <b-button variant="primary" @click="$router.push({name: `${resource}.create`})">
+              <span class="text-nowrap">{{ $t(`modules.${resource}.create`) }}</span>
             </b-button>
           </div>
         </b-col>
@@ -49,14 +49,14 @@
       <template #table-busy>
         <div class="text-center text-default my-2">
           <b-spinner class="align-middle"></b-spinner>
-          <strong class="ml-1">Loading...</strong>
+          <strong class="ml-1">{{ $t('Loading') }}</strong>
         </div>
       </template>
 
       <!-- Column: Actions -->
       <template #cell(actions)="data">
         <div class="text-nowrap">
-          <span v-if="actions.view" class="mx-8px">
+          <span v-if="canView(data.item)" class="mx-8px">
             <feather-icon
                 :id="`row-${data.item.id}-view-icon`"
                 icon="EyeIcon"
@@ -65,13 +65,13 @@
                 @click="$router.push({ name: `${resource}.view`, params: { id: data.item.id } })"
             />
             <b-tooltip
-                title="Details"
+                :title="$t(`modules.${resource}.details`)"
                 class="cursor-pointer"
                 :target="`row-${data.item.id}-view-icon`"
             />
           </span>
 
-          <span v-if="actions.view" class="mx-8px">
+          <span v-if="canUpdate(data.item)" class="mx-8px">
             <feather-icon
                 :id="`row-${data.item.id}-edit-icon`"
                 icon="EditIcon"
@@ -80,7 +80,7 @@
                 @click="$router.push({ name: `${resource}.edit`, params: { id: data.item.id } })"
             />
             <b-tooltip
-                title="Edit"
+                :title="$t(`modules.${resource}.edit`)"
                 class="cursor-pointer"
                 :target="`row-${data.item.id}-edit-icon`"
             />
@@ -100,15 +100,19 @@
               />
             </template>
 
-            <b-dropdown-item v-if="actions.delete" @click="openDeleteModal(data.item)">
+            <!-- DROPDOWN ACTIONS SLOTS PASSED HERE -->
+            <slot v-if="custom_dropdown_actions_slots" name="custom_dropdown_actions" :item="data.item"></slot>
+
+            <b-dropdown-item v-if="canDelete(data.item)" @click="openDeleteModal(data.item)">
               <feather-icon icon="TrashIcon"/>
-              <span class="align-middle ml-50">Delete</span>
+              <span class="align-middle ml-50">{{ $t('Delete') }}</span>
             </b-dropdown-item>
           </b-dropdown>
         </div>
       </template>
-
     </b-table>
+
+
     <div class="mx-2 mb-2">
       <b-row>
         <b-col cols="12" sm="6" class="d-flex align-items-center justify-content-center justify-content-sm-start">
@@ -146,6 +150,7 @@
         </b-col>
       </b-row>
     </div>
+
 
     <b-modal
         ref="delete-confirm-modal"
@@ -287,6 +292,18 @@ export default {
         this.$refs['delete-confirm-modal'].hide();
       }).catch(error => this.handleResponseError(error)).finally(() => this.modalProcessing = false);
     },
+    canCreate() {
+      return this.actions.create;
+    },
+    canView(row) {
+      return this.actions.view && row.actions.can_view;
+    },
+    canDelete(row) {
+      return this.actions.delete && row.actions && row.actions.can_delete;
+    },
+    canUpdate(row) {
+      return this.actions.update && row.actions && row.actions.can_update;
+    }
   },
   watch: {
     filters: {
@@ -309,8 +326,10 @@ export default {
       }
     },
   },
-  computed: {},
-  mounted() {
+  computed: {
+    custom_dropdown_actions_slots() {
+      return this.$scopedSlots.custom_dropdown_actions;
+    },
   }
 }
 </script>
