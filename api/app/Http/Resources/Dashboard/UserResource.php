@@ -27,7 +27,7 @@ class UserResource extends JsonResource
             'dob' => $this->dob,
             'status' => $this->status,
             'status_value' => trans('constants.'.$this->status->value),
-            'created_at' => $this->created_at->format('Y-m-d h:i a'),
+            'created_at' => $this->created_at->format('M j (D) g:i a'),
         ];
     }
 }

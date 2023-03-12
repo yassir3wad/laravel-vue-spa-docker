@@ -64,6 +64,7 @@ class UserControllerTest extends TestCase
 			'password' => 'test123',
 			'password_confirmation' => 'test123',
 			'image' => UploadedFile::fake()->image('test.png'),
+			'status' => ActiveStatusEnum::ACTIVE->value,
 		];
 
 		$response = $this->postJson(route('users.store'), $data);
@@ -97,6 +98,7 @@ class UserControllerTest extends TestCase
 			'username' => 'yassirawad',
 			'email' => 'com.eng.yassir@gmail.com',
 			'mobile' => '+970567940999',
+			'status' => ActiveStatusEnum::INACTIVE->value,
 		];
 
 		$response = $this->putJson(route('users.update', ['user' => $user]), $data);
@@ -118,6 +120,7 @@ class UserControllerTest extends TestCase
 		$this->assertEquals($data['username'], $response->json('data.username'));
 		$this->assertEquals($data['email'], $response->json('data.email'));
 		$this->assertEquals($data['mobile'], $response->json('data.mobile'));
+		$this->assertEquals($data['status'], $response->json('data.status'));
 		$this->assertEquals($user->image, $response->json('data.image'));
 	}
 

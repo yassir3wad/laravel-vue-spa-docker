@@ -71,7 +71,7 @@ class UserService
 		$attributes['image'] = $this->uploaderService->uploadFile($attributes['image'], config('upload.types.users.folder'));
 
 		$user = $this->model->newModelInstance(
-			Arr::only($attributes, ['name', 'username', 'email', 'mobile', 'image'])
+			Arr::only($attributes, ['name', 'username', 'email', 'mobile', 'image', 'status'])
 		)
 			->fill(['password' => $this->hasher->make($attributes['password'])]);
 
@@ -98,7 +98,7 @@ class UserService
 		}
 
 		$user->update(
-			Arr::only($attributes, ['name', 'username', 'email', 'mobile', 'image'])
+			Arr::only($attributes, ['name', 'username', 'email', 'mobile', 'image', 'status'])
 		);
 	}
 

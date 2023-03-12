@@ -59,7 +59,7 @@
       </b-card-body>
     </b-card>
 
-    <list-table api-path="/api/users" :filters="filters" :columns="columns" :actions="actions">
+    <list-table resource="users" api-path="/api/users" :filters="filters" :columns="columns" :actions="actions">
       <template #cell(name)="data">
         <b-media vertical-align="center">
           <template #aside>
@@ -67,12 +67,12 @@
                 size="32"
                 :src="data.item.image"
                 :text="avatarText(data.item.name)"
-                :to="{ name: 'users.index', params: { id: data.item.id } }"
+                :to="{ name: 'users.edit', params: { id: data.item.id } }"
             />
           </template>
 
           <b-link
-              :to="{ name: 'users.index', params: { id: data.item.id } }"
+              :to="{ name: 'users.edit', params: { id: data.item.id } }"
               class="font-weight-bold d-block text-nowrap"
           >
             {{ data.item.name }}
@@ -80,7 +80,15 @@
           <small class="text-muted">@{{ data.item.username }}</small>
         </b-media>
       </template>
-
+      <template #cell(status)="data">
+        <b-badge
+            pill
+            :variant="`light-${resolveUserStatusVariant(data.item.status)}`"
+            class="text-capitalize"
+        >
+          {{ data.item.status_value }}
+        </b-badge>
+      </template>
     </list-table>
 
   </div>
@@ -131,6 +139,7 @@ export default {
         {key: 'id', label: 'ID', sortable: true},
         {key: 'name', label: 'User', sortable: true},
         {key: 'email', label: 'Email', sortable: true},
+        {key: 'status', label: 'Status', sortable: true},
         {key: 'created_at', label: 'Created At', sortable: true},
         {key: 'actions'},
       ];
@@ -159,7 +168,6 @@ export default {
   },
   setup() {
     const resolveUserStatusVariant = status => {
-      if (status === 'pending') return 'warning'
       if (status === 'active') return 'success'
       if (status === 'inactive') return 'secondary'
       return 'primary'

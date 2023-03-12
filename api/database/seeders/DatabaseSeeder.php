@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Enums\ActiveStatusEnum;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,6 +15,8 @@ class DatabaseSeeder extends Seeder
 	{
 		(new PermissionSeeder)->run();
 
-		\App\Models\User::factory(100)->create();
+		$users = \App\Models\User::factory(100)->create();
+
+		User::whereKey($users->random(50)->modelKeys())->update(['status' => ActiveStatusEnum::INACTIVE]);
 	}
 }

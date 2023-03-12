@@ -55,33 +55,57 @@
 
       <!-- Column: Actions -->
       <template #cell(actions)="data">
-        <b-dropdown
-            variant="link"
-            no-caret
-            :right="$store.state.appConfig.isRTL"
-        >
-          <template #button-content>
+        <div class="text-nowrap">
+          <span v-if="actions.view" class="mx-8px">
             <feather-icon
-                icon="MoreVerticalIcon"
+                :id="`row-${data.item.id}-view-icon`"
+                icon="EyeIcon"
                 size="16"
-                class="align-middle text-body"
+                class="cursor-pointer"
+                @click="$router.push({ name: `${resource}.view`, params: { id: data.item.id } })"
             />
-          </template>
-          <b-dropdown-item v-if="actions.view" :to="{ name: 'users.index', params: { id: data.item.id } }">
-            <feather-icon icon="FileTextIcon"/>
-            <span class="align-middle ml-50">Details</span>
-          </b-dropdown-item>
+            <b-tooltip
+                title="Details"
+                class="cursor-pointer"
+                :target="`row-${data.item.id}-view-icon`"
+            />
+          </span>
 
-          <b-dropdown-item v-if="actions.update" :to="{ name: 'users.update', params: { id: data.item.id } }">
-            <feather-icon icon="EditIcon"/>
-            <span class="align-middle ml-50">Edit</span>
-          </b-dropdown-item>
+          <span v-if="actions.view" class="mx-8px">
+            <feather-icon
+                :id="`row-${data.item.id}-edit-icon`"
+                icon="EditIcon"
+                size="16"
+                class="cursor-pointer"
+                @click="$router.push({ name: `${resource}.edit`, params: { id: data.item.id } })"
+            />
+            <b-tooltip
+                title="Edit"
+                class="cursor-pointer"
+                :target="`row-${data.item.id}-edit-icon`"
+            />
+          </span>
 
-          <b-dropdown-item v-if="actions.delete">
-            <feather-icon icon="TrashIcon"/>
-            <span class="align-middle ml-50">Delete</span>
-          </b-dropdown-item>
-        </b-dropdown>
+          <b-dropdown
+              variant="link"
+              no-caret
+              :right="$store.state.appConfig.isRTL"
+              toggle-class="p-0"
+          >
+            <template #button-content>
+              <feather-icon
+                  icon="MoreVerticalIcon"
+                  size="16"
+                  class="align-middle text-body"
+              />
+            </template>
+
+            <b-dropdown-item v-if="actions.delete" @click="openDeleteModal(data.item)">
+              <feather-icon icon="TrashIcon"/>
+              <span class="align-middle ml-50">Delete</span>
+            </b-dropdown-item>
+          </b-dropdown>
+        </div>
       </template>
 
     </b-table>
@@ -122,6 +146,24 @@
         </b-col>
       </b-row>
     </div>
+
+    <b-modal
+        ref="delete-confirm-modal"
+        title="Please Confirm"
+        button-size="sm"
+        ok-title="Delete"
+        cancel-title="Cancel"
+        cancel-variant="outline-secondary"
+        ok-variant="outline-danger"
+        @hidden="() => currentRow = modalProcessing = null"
+        @ok="handleConfirmDeleteModal"
+    >
+      <template #modal-ok>
+        <b-spinner v-if="modalProcessing" small type="grow"/>
+        Delete
+      </template>
+      <b-card-text>Please confirm that you want to delete everything.</b-card-text>
+    </b-modal>
   </b-card>
 </template>
 
@@ -134,6 +176,10 @@ export default {
   props: {
     columns: {
       type: Array,
+      required: true
+    },
+    resource: {
+      type: String,
       required: true
     },
     sort: {
@@ -167,6 +213,8 @@ export default {
   data() {
     return {
       processing: false,
+      modalProcessing: false,
+      currentRow: false,
       internalSort: {
         column: 'created_at',
         isSortDirDesc: true
@@ -225,7 +273,20 @@ export default {
       }
 
       return api;
-    }
+    },
+    openDeleteModal(row) {
+      this.currentRow = row;
+      this.$refs['delete-confirm-modal'].show();
+    },
+    handleConfirmDeleteModal(e) {
+      e.preventDefault();
+      this.modalProcessing = true;
+      this.$http.delete(`${this.apiPath}/${this.currentRow.id}`).then(({data}) => {
+        this.refresh();
+        this.toast('success', 'Success', data.message);
+        this.$refs['delete-confirm-modal'].hide();
+      }).catch(error => this.handleResponseError(error)).finally(() => this.modalProcessing = false);
+    },
   },
   watch: {
     filters: {
@@ -235,6 +296,9 @@ export default {
       }, 500)
     },
     'pagination.page': debounce(function () {
+      this.refresh();
+    }, 500),
+    'pagination.perPage': debounce(function () {
       this.refresh();
     }, 500),
     sort: {
@@ -252,5 +316,8 @@ export default {
 </script>
 
 <style scoped>
-
+.mx-8px {
+  margin-left: 5px;
+  margin-right: 5px;
+}
 </style>

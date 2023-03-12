@@ -11,18 +11,11 @@ modulesRoutes.forEach(function (item) {
 		name: `${item.name}.index`,
 		meta: {
 			middleware: [ensureCsrfTokenSet, authenticated],
-			title: 'Users',
 			resource: item.name,
 			permission: {
 				parent: item.name,
 				permission: 'viewAny user',
-			},
-			breadcrumb: [
-				{
-					text: 'Users',
-					active: true,
-				}
-			]
+			}
 		},
 		component: () => import(`@/views/pages/${item.name}/List.vue`),
 	});
@@ -32,47 +25,25 @@ modulesRoutes.forEach(function (item) {
 		name: `${item.name}.create`,
 		meta: {
 			middleware: [ensureCsrfTokenSet, authenticated],
-			title: 'Create User',
 			resource: item.name,
 			permission: {
 				parent: item.name,
 				permission: 'create user',
-			},
-			breadcrumb: [
-				{
-					text: 'Users',
-					active: true,
-				},
-				{
-					text: 'Create',
-					active: true,
-				}
-			]
+			}
 		},
 		component: () => import(`@/views/pages/${item.name}/Form.vue`),
 	});
 
 	routes.push({
 		path: `/${item.name}/:id/edit`,
-		name: `${item.name}.update`,
+		name: `${item.name}.edit`,
 		meta: {
 			middleware: [ensureCsrfTokenSet, authenticated],
-			title: 'Update User',
 			resource: item.name,
 			permission: {
 				parent: item.name,
 				permission: 'update user',
-			},
-			breadcrumb: [
-				{
-					text: 'Users',
-					active: true,
-				},
-				{
-					text: 'Update',
-					active: true,
-				}
-			]
+			}
 		},
 		component: () => import(`@/views/pages/${item.name}/Form.vue`),
 	});

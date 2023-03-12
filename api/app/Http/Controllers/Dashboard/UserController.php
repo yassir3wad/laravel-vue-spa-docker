@@ -19,115 +19,136 @@ use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
-    private UserService $userService;
+	/**
+	 * @var UserService
+	 */
+	private UserService $userService;
 
-    public function __construct(UserService $userService)
-    {
-        $this->userService = $userService;
+	/**
+	 * @param UserService $userService
+	 */
+	public function __construct(UserService $userService)
+	{
+		$this->userService = $userService;
 
-        $this->authorizeResource(User::class);
-    }
+		$this->authorizeResource(User::class);
+	}
 
-    /**
-     * @return Response
-     */
-    public function index(UserSearchRequest $request)
-    {
-        $users = $this->userService->getUsers(
-            [
-                'column' => $request->sort,
-                'direction' => $request->sort_dir,
-            ],
-            $request->only(['page', 'per_page']),
-            $request->only(['name', 'email', 'from_date', 'to_date', 'role_id']),
-        );
+	/**
+	 * @param UserSearchRequest $request
+	 *
+	 * @return Response
+	 */
+	public function index(UserSearchRequest $request)
+	{
+		$users = $this->userService->getUsers(
+			[
+				'column' => $request->sort,
+				'direction' => $request->sort_dir,
+			],
+			$request->only(['page', 'per_page']),
+			$request->only(['name', 'email', 'from_date', 'to_date', 'role_id']),
+		);
 
-        return Responder::setPaginatedData(
-            UserResource::collection($users)
-        )->respond();
-    }
+		return Responder::setPaginatedData(
+			UserResource::collection($users)
+		)->respond();
+	}
 
-    /**
-     * @return Response
-     */
-    public function show(User $user)
-    {
-        return Responder::setData(
-            new UserResource($user)
-        )->respond();
-    }
+	/**
+	 * @param User $user
+	 *
+	 * @return Response
+	 */
+	public function show(User $user)
+	{
+		return Responder::setData(
+			new UserResource($user)
+		)->respond();
+	}
 
-    /**
-     * @return Response
-     */
-    public function store(UpsertUserRequest $request)
-    {
-        $user = $this->userService->createUser(
-            $request->only(['name', 'email', 'username', 'mobile', 'image', 'password', 'password_confirmation', 'role_id'])
-        );
+	/**
+	 * @param UpsertUserRequest $request
+	 *
+	 * @return Response
+	 * @throws \InvalidArgumentException
+	 */
+	public function store(UpsertUserRequest $request)
+	{
+		$user = $this->userService->createUser(
+			$request->only(['name', 'email', 'username', 'mobile', 'image', 'status', 'password', 'password_confirmation', 'role_id'])
+		);
 
-        return Responder::setData(new UserResource($user))
-            ->setMessage(trans('dashboard.created_successfully'))
-            ->setStatusCode(Response::HTTP_CREATED)
-            ->respond();
-    }
+		return Responder::setData(new UserResource($user))
+			->setMessage(trans('dashboard.created_successfully'))
+			->setStatusCode(Response::HTTP_CREATED)
+			->respond();
+	}
 
-    /**
-     * @return Response
-     */
-    public function update(User $user, UpsertUserRequest $request)
-    {
-        $this->userService->updateUser(
-            $user,
-            $request->only(['name', 'email', 'username', 'mobile', 'image', 'role_id'])
-        );
+	/**
+	 * @param User $user
+	 * @param UpsertUserRequest $request
+	 *
+	 * @return Response
+	 * @throws \InvalidArgumentException
+	 */
+	public function update(User $user, UpsertUserRequest $request)
+	{
+		$this->userService->updateUser(
+			$user,
+			$request->only(['name', 'email', 'username', 'mobile', 'image', 'status', 'role_id'])
+		);
 
-        return Responder::setData(new UserResource($user))
-            ->setMessage(trans('dashboard.updated_successfully'))
-            ->respond();
-    }
+		return Responder::setData(new UserResource($user))
+			->setMessage(trans('dashboard.updated_successfully'))
+			->respond();
+	}
 
-    /**
-     * @return Response
-     */
-    public function destroy(User $user)
-    {
-        $this->userService->deleteUser($user);
+	/**
+	 * @param User $user
+	 *
+	 * @return Response
+	 */
+	public function destroy(User $user)
+	{
+		$this->userService->deleteUser($user);
 
-        return Responder::setMessage(trans('dashboard.deleted_successfully'))
-            ->respond();
-    }
+		return Responder::setMessage(trans('dashboard.deleted_successfully'))
+			->respond();
+	}
 
-    /**
-     * @return Response
-     *
-     * @throws AuthorizationException
-     */
-    public function resetPassword(User $user, ResetPasswordRequest $request)
-    {
-        $this->authorize('resetPassword', $user);
+	/**
+	 * @param User $user
+	 * @param ResetPasswordRequest $request
+	 *
+	 * @return mixed
+	 * @throws AuthorizationException
+	 */
+	public function resetPassword(User $user, ResetPasswordRequest $request)
+	{
+		$this->authorize('resetPassword', $user);
 
-        $this->userService->updateUserPassword($user, $request->password);
+		$this->userService->updateUserPassword($user, $request->password);
 
-        return Responder::setMessage(trans('dashboard.updated_successfully'))
-            ->respond();
-    }
+		return Responder::setMessage(trans('dashboard.updated_successfully'))
+			->respond();
+	}
 
-    /**
-     * @return Response
-     *
-     * @throws AuthorizationException
-     * @throws ValidationException
-     */
-    public function changeStatus(User $user, Request $request)
-    {
-        $this->authorize('changeStatus', $user);
+	/**
+	 * @return Response
+	 *
+	 * @throws AuthorizationException
+	 * @throws ValidationException
+	 */
+	public function changeStatus(User $user, Request $request)
+	{
+		$this->authorize('changeStatus', $user);
 
-        $request->validate(['status' => ['required', 'string', Rule::in(ActiveStatusEnum::values())]]);
+		$request->validate(['status' => ['required', 'string', Rule::in(ActiveStatusEnum::values())]]);
 
-        $this->userService->changeUserStatus($user, ActiveStatusEnum::from($request->status));
+		$this->userService->changeUserStatus($user, ActiveStatusEnum::from($request->status));
 
-        return Responder::setMessage(trans('dashboard.updated_successfully'))
-            ->respond();
-    }
+		return Responder::setMessage(trans('dashboard.updated_successfully'))
+			->respond();
+	}
 }
