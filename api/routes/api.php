@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\UploadController;
+use App\Http\Controllers\Dashboard\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,11 +19,16 @@ use App\Http\Controllers\Dashboard\UploadController;
 Route::middleware('auth:sanctum')->group(function () {
 	Route::post('/files', [UploadController::class, 'store']);
 
-	Route::get('/user', [ProfileController::class, 'me']);
-	Route::get('users', function () {
-		return \App\Http\Resources\Dashboard\UserProfileResource::collection(
-			\App\Models\User::orderBy(\request('sort'), \request('sort_dir'))->paginate(\request('per_page'))
-		);
+	Route::get('/me', [ProfileController::class, 'me']);
+
+	Route::prefix('users')->as('users.')->controller(UserController::class)->group(function () {
+		Route::get('/', 'index')->name('index');
+		Route::get('{user}', 'show')->name('show');
+		Route::post('/', 'store')->name('store');
+		Route::put('{user}', 'update')->name('update');
+		Route::delete('{user}', 'destroy')->name('delete');
+		Route::patch('{user}/reset-password', 'resetPassword')->name('reset-password');
+		Route::patch('{user}/change-status', 'changeStatus')->name('change-status');
 	});
 });
 

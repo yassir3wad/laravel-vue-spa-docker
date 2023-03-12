@@ -5,7 +5,8 @@ import Vuex from 'vuex'
 import app from './app'
 import appConfig from './app-config'
 import verticalMenu from './vertical-menu'
-import auth from './auth'
+import auth from './auth.store'
+import breadcrumbs from './breadcrumbs.store'
 
 Vue.use(Vuex)
 
@@ -15,6 +16,7 @@ export default new Vuex.Store({
 		appConfig,
 		verticalMenu,
 		auth,
+		breadcrumbs,
 	},
 	strict: process.env.NODE_ENV !== 'production'
 })

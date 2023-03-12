@@ -89,6 +89,7 @@
 <script>
 import {avatarText} from '@core/utils/filter'
 import ListTable from '../../components/ListTable';
+import {SET_BREADCRUMB} from "@/store/breadcrumbs.store";
 
 export default {
   components: {
@@ -150,6 +151,11 @@ export default {
         {label: 'Inactive', value: 'inactive'},
       ];
     }
+  },
+  mounted() {
+    this.$store.dispatch(SET_BREADCRUMB, [
+      {text: this.$t('modules.users.users'), active: true}
+    ]);
   },
   setup() {
     const resolveUserStatusVariant = status => {

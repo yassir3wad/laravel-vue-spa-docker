@@ -39,16 +39,11 @@
 
 <script>
 /* eslint-disable global-require */
-import { BLink, BButton, BImg } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
-import store from '@/store/index'
 
 export default {
   components: {
     VuexyLogo,
-    BLink,
-    BButton,
-    BImg,
   },
   data() {
     return {
@@ -57,7 +52,7 @@ export default {
   },
   computed: {
     imgUrl() {
-      if (store.state.appConfig.layout.skin === 'dark') {
+      if (this.$store.state.appConfig.layout.skin === 'dark') {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
         this.downImg = require('@/assets/images/pages/error-dark.svg')
         return this.downImg

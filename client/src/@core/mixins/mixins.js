@@ -8,6 +8,10 @@ export default {
 						ref.setErrors($errors);
 					}
 					this.showErrorsInToastr($errors);
+				} else if (error.response.status === 403) {
+					this.$router.push({name: 'error-403'});
+				} else if (error.response.status === 404) {
+					this.$router.push({name: 'error-404'});
 				} else {
 					this.toast('danger', this.$t("Error"), error.response.data.message);
 				}

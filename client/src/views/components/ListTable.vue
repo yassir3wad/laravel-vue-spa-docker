@@ -72,7 +72,7 @@
             <span class="align-middle ml-50">Details</span>
           </b-dropdown-item>
 
-          <b-dropdown-item v-if="actions.update" :to="{ name: 'users.index', params: { id: data.item.id } }">
+          <b-dropdown-item v-if="actions.update" :to="{ name: 'users.update', params: { id: data.item.id } }">
             <feather-icon icon="EditIcon"/>
             <span class="align-middle ml-50">Edit</span>
           </b-dropdown-item>

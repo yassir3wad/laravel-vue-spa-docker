@@ -1,30 +1,27 @@
 <template>
-  <b-form-group :label="label">
-    <file-pond
-        name="file"
-        ref="pond"
-        :class="{ 'error' : errors && errors.length }"
-        label-idle="Drop files here..."
-        :allowMultiple="allowMultiple"
-        :allowReorder="allowReorder"
-        credits="false"
-        :storeAsFile="false"
-        :maxFiles="maxFiles"
-        :maxParallelUploads="1"
-        :accepted-file-types="mimes"
-        :server="server"
-        required
-        instantUpload="true"
-        allowImagePreview="true"
-        allowFileSizeValidation="true"
-        :maxFileSize="maxFileSize + 'MB'"
-        chunkUploads="false"
-        imagePreviewHeight="200"
-        @removefile="filesUpdated"
-        @processfile="filesUpdated"
-    />
-    <small class="text-danger d-block" style="margin-top: -8px" v-if="errors && errors.length">{{ errors[0] }}</small>
-  </b-form-group>
+  <file-pond
+      name="file"
+      ref="pond"
+      :class="{ 'error' : errors && errors.length }"
+      :label-idle="$t('Drop File')"
+      maxParallelUploads="1"
+      maxFiles="1"
+      :accepted-file-types="mimes"
+      :server="server"
+      allowMultiple="false"
+      credits="false"
+      :allowProcess="instantUpload"
+      :instantUpload="instantUpload"
+      checkValidity="true"
+      allowImagePreview="true"
+      allowFileSizeValidation="true"
+      chunkUploads="false"
+      :maxFileSize="maxFileSize + 'MB'"
+      :stylePanelLayout="layout"
+      @removefile="fileRemoved"
+      @processfile="fileProcessed"
+      @addfile="fileAdded"
+  />
 </template>
 
 <script>
@@ -43,41 +40,22 @@ export default {
   name: "file-uploader",
   components: {FilePond},
   props: {
-    label: {
-      type: String,
-      default() {
-        return 'Image';
-      },
-    },
     serverKey: {
       type: String,
-      required: true
     },
     errors: {
       type: Array
     },
-    allowMultiple: {
+    instantUpload: {
       type: Boolean,
       default() {
         return false;
-      },
-    },
-    allowReorder: {
-      type: Boolean,
-      default() {
-        return false;
-      },
-    },
-    maxFiles: {
-      type: Number,
-      default() {
-        return 1;
       },
     },
     maxFileSize: {
       type: Number,
       default() {
-        return 4;
+        return 2;
       },
     },
     mimes: {
@@ -87,19 +65,27 @@ export default {
       },
     },
     value: {
-      type: Array,
       default() {
-        return []
+        return null;
+      }
+    },
+    layout: {
+      default() {
+        return 'compact';
       },
       validator(val) {
-        return val.filter(item => !item.url || !item.path).length === 0;
+        return val === 'circle' || val === 'integrated' || val === 'compact';
       }
-    }
+    },
   },
   data() {
     return {
       server: {
         process: (fieldName, file, metadata, load, error, progress, abort) => {
+          if (!this.serverKey) {
+            throw new Error('serverKey prop is required');
+          }
+
           const formData = new FormData();
           formData.append(fieldName, file, file.name);
           formData.append('type', this.serverKey);
@@ -129,10 +115,6 @@ export default {
 
         load: (source, load, error, progress, abort, headers) => {
           const controller = new AbortController();
-          // fetch(source)
-          //     .then((response) => response.blob())
-          //     .then(load)
-          //     .catch(error);
           axios.get(source, {
             signal: controller.signal,
             responseType: 'blob',
@@ -157,48 +139,81 @@ export default {
         revert: null,
         remove: null,
       },
-      files: this.value
+      internalValue: null
     }
   },
   methods: {
-    filesUpdated() {
-      this.files = this.$refs.pond.getFiles().map(file => {
-        return {
+    fileProcessed(error, file) {
+      if (error) {
+        this.internalValue = null;
+      } else {
+        this.internalValue = {
           path: file.getMetadata('path') ? file.getMetadata('path') : file.serverId,
           url: file.getMetadata('url') ? file.getMetadata('url') : file.serverId
         };
-      }).filter(item => item && item.path);
+      }
+    },
+    fileRemoved(error, file) {
+      this.internalValue = null;
+    },
+    fileAdded(error, file) {
+      if (this.instantUpload) return;
+
+      if (error) {
+        this.internalValue = null;
+      } else if (file.origin === 1) {
+        // added by the user
+        this.internalValue = file.file;
+      }
+    },
+    handleInput() {
+      if (this.internalValue) {
+        if (this.instantUpload) {
+          this.handleInstantUpload();
+        } else {
+          this.handleFormUpload();
+        }
+      } else {
+        this.clear();
+      }
+    },
+    handleInstantUpload() {
+      if (typeof this.internalValue !== 'object' || !this.internalValue.url || !this.internalValue.path) {
+        throw new Error('value must be of type object{path, url}')
+      }
+
+      this.$refs.pond.addFile(this.internalValue.url, {
+        metadata: {
+          path: this.internalValue.path,
+          url: this.internalValue.url,
+        },
+        type: 'local'
+      })
+    },
+    handleFormUpload() {
+      if (typeof this.internalValue === 'string') {
+        this.$refs.pond.addFile(this.internalValue, {
+          type: 'local'
+        });
+      }
+    },
+    clear() {
+      this.$refs.pond.removeFiles();
     }
   },
   watch: {
-    files: {
-      deep: true,
+    internalValue: {
       handler(val) {
+        this.handleInput();
         this.$emit('input', val);
       }
     },
     value: {
       immediate: true,
-      deep: true,
       handler(val) {
-        this.files = val;
+        this.internalValue = val;
       }
     }
-  },
-  mounted() {
-    this.files.forEach(file => {
-      this.$refs.pond.addFile(file.url, {
-        metadata: {
-          path: file.path,
-          url: file.url,
-        },
-        type: 'local'
-      });
-    });
   }
 }
 </script>
-
-<style>
-
-</style>

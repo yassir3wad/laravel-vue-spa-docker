@@ -24,7 +24,7 @@ export default {
 			await Vue.prototype.$http.post('/api/login', form);
 			return dispatch('user');
 		}, async user({commit}) {
-			return await Vue.prototype.$http.get('/api/user').then(({data}) => {
+			return await Vue.prototype.$http.get('/api/me').then(({data}) => {
 				commit('SET_USER', data.data)
 			}).catch(() => {
 				commit('SET_USER', null)

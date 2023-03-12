@@ -68,6 +68,7 @@ import AccountSettingGeneral from './AccountSettingGeneral.vue'
 import AccountSettingPassword from './AccountSettingPassword.vue'
 import AccountSettingInformation from './AccountSettingInformation.vue'
 import {mapGetters} from 'vuex';
+import {SET_BREADCRUMB} from "@/store/breadcrumbs.store";
 
 export default {
   components: {
@@ -80,5 +81,10 @@ export default {
       user: 'auth/user'
     })
   },
+  mounted() {
+    this.$store.dispatch(SET_BREADCRUMB, [
+      {text: this.$t('Profile'), active: true}
+    ]);
+  }
 }
 </script>

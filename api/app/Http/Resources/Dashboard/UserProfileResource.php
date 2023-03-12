@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Dashboard;
 
+use App\Utils\Url;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
@@ -20,7 +21,7 @@ class UserProfileResource extends JsonResource
 			'name' => $this->name,
 			'email' => $this->email,
 			'username' => $this->username,
-			'image' => $this->image ? Storage::url($this->image) : null,
+			'image' => Url::isValidUrl($this->image) ? $this->image : Storage::url($this->image),
 			'mobile' => $this->mobile,
 			'bio' => $this->bio,
 			'dob' => $this->dob,

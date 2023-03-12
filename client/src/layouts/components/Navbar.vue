@@ -28,10 +28,10 @@
           class="dropdown-user"
       >
         <template #button-content>
-          <div class="d-sm-flex d-none user-nav">
-            <p v-if="user" class="user-name font-weight-bolder mb-0">
+          <div class="d-sm-flex d-none user-nav" v-if="user">
+            <p class="user-name font-weight-bolder mb-0">
               {{ user.name }}</p>
-            <span class="user-status">Admin</span>
+            <span class="user-status">@{{ user.username }}</span>
           </div>
           <b-avatar
               v-if="user"

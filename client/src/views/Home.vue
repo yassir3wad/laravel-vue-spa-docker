@@ -19,7 +19,14 @@
 
 <script>
 
+import {SET_BREADCRUMB} from "@/store/breadcrumbs.store";
+
 export default {
+  mounted() {
+    this.$store.dispatch(SET_BREADCRUMB, [
+      {text: this.$t('Home'), active: true}
+    ]);
+  },
 }
 </script>
 
