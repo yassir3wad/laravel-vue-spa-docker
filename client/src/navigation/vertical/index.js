@@ -11,7 +11,7 @@ export default [
 	},
 	{
 		title: 'modules.users.users',
-		icon: 'UserIcon',
+		icon: 'UsersIcon',
 		route: 'users.index',
 	},
 	// {

@@ -89,6 +89,65 @@ class UserControllerTest extends TestCase
 		$this->assertNotNull($response->json('data.image'));
 	}
 
+	public function test_cant_create_a_user_if_the_name_is_missing()
+	{
+		$this->authUser();
+		$data = [
+			'username' => 'yassirawad',
+			'email' => 'com.eng.yassir@gmail.com',
+			'mobile' => '+970567940999',
+			'password' => 'test123',
+			'password_confirmation' => 'test123',
+			'image' => UploadedFile::fake()->image('test.png'),
+			'status' => ActiveStatusEnum::ACTIVE->value,
+		];
+
+		$response = $this->postJson(route('users.store'), $data);
+
+		$response->assertStatus(422);
+		$response->assertJsonValidationErrorFor('name');
+	}
+
+	public function test_cant_create_a_user_if_the_email_is_missing()
+	{
+		$this->authUser();
+		$data = [
+			'name' => 'yassir awad',
+			'username' => 'yassirawad',
+			'mobile' => '+970567940999',
+			'password' => 'test123',
+			'password_confirmation' => 'test123',
+			'image' => UploadedFile::fake()->image('test.png'),
+			'status' => ActiveStatusEnum::ACTIVE->value,
+		];
+
+		$response = $this->postJson(route('users.store'), $data);
+
+		$response->assertStatus(422);
+		$response->assertJsonValidationErrorFor('email');
+	}
+
+	public function test_cant_create_a_user_if_the_email_is_used()
+	{
+		$user = $this->authUser();
+
+		$data = [
+			'name' => 'yassir awad',
+			'username' => 'yassirawad',
+			'email' => $user->email,
+			'mobile' => '+970567940999',
+			'password' => 'test123',
+			'password_confirmation' => 'test123',
+			'image' => UploadedFile::fake()->image('test.png'),
+			'status' => ActiveStatusEnum::ACTIVE->value,
+		];
+
+		$response = $this->postJson(route('users.store'), $data);
+
+		$response->assertStatus(422);
+		$response->assertJsonValidationErrorFor('email');
+	}
+
 	public function test_admin_can_update_a_user()
 	{
 		$this->authUser();
