@@ -36,7 +36,8 @@
             <v-select
                 :dir="appDir"
                 v-model="filters.role_id.value"
-                :options="roleOptions"
+                :options="roles"
+                label="name"
                 class="w-100"
             />
           </b-col>
@@ -141,6 +142,7 @@ import ListTable from '../../components/ListTable';
 import ResetPasswordModal from '../../components/modals/ResetPasswordModal';
 import {SET_BREADCRUMB} from "@/store/breadcrumbs.store";
 import {resolveStatusVariant} from "@core/mixins/helpers";
+import {getRoles} from "@core/comp-functions/roles";
 
 export default {
   components: {
@@ -165,7 +167,7 @@ export default {
         role_id: {
           value: null,
           format() {
-            return this.value?.value;
+            return this.value?.id;
           }
         },
         status: {
@@ -196,15 +198,6 @@ export default {
         {key: 'actions'},
       ];
     },
-    roleOptions() {
-      return [
-        {label: 'Admin', value: 'admin'},
-        {label: 'Author', value: 'author'},
-        {label: 'Editor', value: 'editor'},
-        {label: 'Maintainer', value: 'maintainer'},
-        {label: 'Subscriber', value: 'subscriber'},
-      ];
-    },
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [
@@ -218,7 +211,11 @@ export default {
     }
   },
   setup() {
+    const {roles} = getRoles();
+
     return {
+      roles,
+
       // Filter
       avatarText,
 

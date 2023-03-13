@@ -52,6 +52,7 @@ class UserService
 			->presentWhereLike('email', Arr::get($filters, 'email'))
 			->presentWhereDate('created_at', '>=', Arr::get($filters, 'from_date'))
 			->presentWhereDate('created_at', '<=', Arr::get($filters, 'to_date'))
+			->presentWhereRelation('id', 'roles', Arr::get($filters, 'role_id'))
 			->paginate(
 				perPage: $pagination['per_page'] ?? config('app.per_page'), page: $pagination['page'] ?? 1
 			);

@@ -27,7 +27,7 @@
       <locale />
       <dark-Toggler class="d-none d-lg-block" />
       <search-bar />
-      <notification-dropdown />
+<!--      <notification-dropdown />-->
       <user-dropdown />
     </b-navbar-nav>
   </div>
