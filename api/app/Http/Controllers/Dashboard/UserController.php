@@ -7,7 +7,7 @@ use App\Facades\Responder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\User\ResetPasswordRequest;
 use App\Http\Requests\Dashboard\User\UpsertUserRequest;
-use App\Http\Requests\Dashboard\User\UserSearchRequest;
+use App\Http\Requests\Dashboard\User\SearchUserRequest;
 use App\Http\Resources\Dashboard\UserResource;
 use App\Models\User;
 use App\Services\UserService;
@@ -35,11 +35,11 @@ class UserController extends Controller
 	}
 
 	/**
-	 * @param UserSearchRequest $request
+	 * @param SearchUserRequest $request
 	 *
 	 * @return Response
 	 */
-	public function index(UserSearchRequest $request)
+	public function index(SearchUserRequest $request)
 	{
 		$users = $this->userService->getUsers(
 			[
@@ -62,6 +62,8 @@ class UserController extends Controller
 	 */
 	public function show(User $user)
 	{
+		$user->load('roles');
+
 		return Responder::setData(
 			new UserResource($user)
 		)->respond();
@@ -76,7 +78,7 @@ class UserController extends Controller
 	public function store(UpsertUserRequest $request)
 	{
 		$user = $this->userService->createUser(
-			$request->only(['name', 'email', 'username', 'mobile', 'image', 'status', 'password', 'password_confirmation', 'role_id'])
+			$request->only(['name', 'email', 'username', 'mobile', 'image', 'status', 'password', 'password_confirmation', 'role_ids'])
 		);
 
 		return Responder::setData(new UserResource($user))
@@ -96,7 +98,7 @@ class UserController extends Controller
 	{
 		$this->userService->updateUser(
 			$user,
-			$request->only(['name', 'email', 'username', 'mobile', 'image', 'status', 'role_id'])
+			$request->only(['name', 'email', 'username', 'mobile', 'image', 'status', 'role_ids'])
 		);
 
 		return Responder::setData(new UserResource($user))

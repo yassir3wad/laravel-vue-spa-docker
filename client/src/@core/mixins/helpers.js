@@ -10,3 +10,11 @@ export function setCookie(cname, value, expiryDays) {
 	document.cookie = cname + '=' + value + ';' + expires + ';path=/';
 }
 
+
+export function resolveStatusVariant(status) {
+	if (status === 'active') return 'success'
+	if (status === 'inactive') return 'secondary'
+
+	return 'primary'
+}
+

@@ -8,7 +8,7 @@
           <label>Show</label>
           <v-select
               v-model="pagination.perPage"
-              :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+              :dir="appDir"
               :options="pagination.perPageOptions"
               :clearable="false"
               class="per-page-selector d-inline-block mx-50"
@@ -56,36 +56,28 @@
       <!-- Column: Actions -->
       <template #cell(actions)="data">
         <div class="text-nowrap">
-          <span v-if="canView(data.item)" class="mx-8px">
-            <feather-icon
-                :id="`row-${data.item.id}-view-icon`"
-                icon="EyeIcon"
-                size="16"
-                class="cursor-pointer"
-                @click="$router.push({ name: `${resource}.view`, params: { id: data.item.id } })"
-            />
-            <b-tooltip
-                :title="$t(`modules.${resource}.details`)"
-                class="cursor-pointer"
-                :target="`row-${data.item.id}-view-icon`"
-            />
-          </span>
-
-          <span v-if="canUpdate(data.item)" class="mx-8px">
-            <feather-icon
-                :id="`row-${data.item.id}-edit-icon`"
-                icon="EditIcon"
-                size="16"
-                class="cursor-pointer"
-                @click="$router.push({ name: `${resource}.edit`, params: { id: data.item.id } })"
-            />
-            <b-tooltip
-                :title="$t(`modules.${resource}.edit`)"
-                class="cursor-pointer"
-                :target="`row-${data.item.id}-edit-icon`"
-            />
-          </span>
-
+          <b-button
+              v-if="canView(data.item)"
+              class="btn-icon px-8px"
+              variant="flat-default"
+              tabindex="0"
+              v-b-tooltip.hover
+              :title="$t(`modules.${resource}.details`)"
+              @click="$router.push({ name: `${resource}.view`, params: { id: data.item.id } })">
+            <feather-icon icon="EyeIcon" size="16"/>
+          </b-button>
+          
+          <b-button
+              v-if="canUpdate(data.item)"
+              class="btn-icon px-8px"
+              variant="flat-default"
+              tabindex="0"
+              v-b-tooltip.hover
+              :title="$t(`modules.${resource}.edit`)"
+              @click="$router.push({ name: `${resource}.edit`, params: { id: data.item.id } })">
+            <feather-icon icon="EditIcon" size="16"/>
+          </b-button>
+          
           <b-dropdown
               variant="link"
               no-caret
@@ -154,10 +146,9 @@
 
     <b-modal
         ref="delete-confirm-modal"
-        title="Please Confirm"
+        :title="$t('Please Confirm')"
         button-size="sm"
-        ok-title="Delete"
-        cancel-title="Cancel"
+        :cancel-title="$t('Cancel')"
         cancel-variant="outline-secondary"
         ok-variant="outline-danger"
         @hidden="() => currentRow = modalProcessing = null"
@@ -165,9 +156,9 @@
     >
       <template #modal-ok>
         <b-spinner v-if="modalProcessing" small type="grow"/>
-        Delete
+        {{ $t('Delete') }}
       </template>
-      <b-card-text>Please confirm that you want to delete everything.</b-card-text>
+      <b-card-text>{{ $t('delete_confirmation') }}</b-card-text>
     </b-modal>
   </b-card>
 </template>
@@ -320,9 +311,11 @@ export default {
     }, 500),
     sort: {
       deep: true,
-      handler: (newVal) => {
-        this.internalSort.column = newVal.column;
-        this.internalSort.isSortDirDesc = newVal.direction === 'desc';
+      handler(newVal) {
+        this.internalSort = {
+          column: newVal.column,
+          isSortDirDesc: newVal.direction === 'desc',
+        };
       }
     },
   },
@@ -335,8 +328,8 @@ export default {
 </script>
 
 <style scoped>
-.mx-8px {
-  margin-left: 5px;
-  margin-right: 5px;
+.px-8px {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 </style>

@@ -34,7 +34,7 @@
               class="mt-2">
             <label>Role</label>
             <v-select
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :dir="appDir"
                 v-model="filters.role_id.value"
                 :options="roleOptions"
                 class="w-100"
@@ -47,9 +47,43 @@
               class="mt-2">
             <label>Status</label>
             <v-select
-                :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
+                :dir="appDir"
                 v-model="filters.status.value"
-                :options="statusOptions"
+                :options="$t('active_status_list')"
+                class="w-100"
+            />
+          </b-col>
+
+          <b-col
+              cols="12"
+              md="4"
+              class="mt-2">
+            <label for="from_date">{{ $t('From Date') }}</label>
+            <b-form-datepicker
+                id="from_date"
+                :placeholder="$t('Choose a date')"
+                :locale="appLocale"
+                :direction="appDir"
+                v-model="filters.from_date.value"
+                :dropup="false"
+                no-flip
+                class="w-100"
+            />
+          </b-col>
+
+          <b-col
+              cols="12"
+              md="4"
+              class="mt-2">
+            <label for="to_date">{{ $t('To Date') }}</label>
+            <b-form-datepicker
+                id="to_date"
+                :placeholder="$t('Choose a date')"
+                :locale="appLocale"
+                :direction="appDir"
+                v-model="filters.to_date.value"
+                :dropup="false"
+                no-flip
                 class="w-100"
             />
           </b-col>
@@ -81,7 +115,7 @@
       <template #cell(status)="data">
         <b-badge
             pill
-            :variant="`light-${resolveUserStatusVariant(data.item.status)}`"
+            :variant="`light-${resolveStatusVariant(data.item.status)}`"
             class="text-capitalize"
         >
           {{ data.item.status_value }}
@@ -106,6 +140,7 @@ import {avatarText} from '@core/utils/filter'
 import ListTable from '../../components/ListTable';
 import ResetPasswordModal from '../../components/modals/ResetPasswordModal';
 import {SET_BREADCRUMB} from "@/store/breadcrumbs.store";
+import {resolveStatusVariant} from "@core/mixins/helpers";
 
 export default {
   components: {
@@ -139,6 +174,12 @@ export default {
             return this.value?.value;
           }
         },
+        from_date: {
+          value: null
+        },
+        to_date: {
+          value: null
+        },
       },
       showResetPasswordModal: false,
       currentRow: null,
@@ -164,13 +205,6 @@ export default {
         {label: 'Subscriber', value: 'subscriber'},
       ];
     },
-    statusOptions() {
-      return [
-        {label: 'Pending', value: 'pending'},
-        {label: 'Active', value: 'active'},
-        {label: 'Inactive', value: 'inactive'},
-      ];
-    }
   },
   mounted() {
     this.$store.dispatch(SET_BREADCRUMB, [
@@ -184,18 +218,12 @@ export default {
     }
   },
   setup() {
-    const resolveUserStatusVariant = status => {
-      if (status === 'active') return 'success'
-      if (status === 'inactive') return 'secondary'
-      return 'primary'
-    }
-
     return {
       // Filter
       avatarText,
 
       // UI
-      resolveUserStatusVariant,
+      resolveStatusVariant,
     }
   },
 }

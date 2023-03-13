@@ -165,6 +165,7 @@ export default {
 	"Mail Templates": "Mail Templates",
 	"Welcome": "Welcome",
 	"Reset Password": "Reset Password",
+	"Reset": "Reset",
 	"Verify Email": "Verify Email",
 	"Deactivate Account": "Deactivate Account",
 	"Promotional": "Promotional",
@@ -192,6 +193,11 @@ export default {
 	"Loading": "Loading...",
 	"Login": "Login",
 	"Forget Password": "Forget Password",
+	"Choose a date": "Choose a date",
+	"From Date": "From Date",
+	"To Date": "To Date",
+	"Please Confirm": "Please Confirm",
+	"Permissions": "Permissions",
 	"Drop File": "Drop file here or <span class='filepond--label-action'>Browse</span>",
 	model_filters: (ctx) => `${ctx.named('model')} Filters:`,
 	add_model: (ctx) => `Add ${ctx.named('model')}`,
@@ -202,6 +208,9 @@ export default {
 	save_model: (ctx) => `Save ${ctx.named('model')}`,
 	import_model: (ctx) => `Import ${ctx.named('model')}`,
 	field_lang: (ctx) => `${ctx.named('field')} in ${ctx.named('lang')}`,
+	delete_confirmation: "Please confirm that you want to delete this resource.",
+	select_all: 'Select All',
+	unselect: 'Un Select',
 	modules: {
 		users: {
 			create: 'Create User',
@@ -211,11 +220,15 @@ export default {
 			user: 'User',
 		},
 		roles: {
-			create_role: 'Create Role',
-			edit_role: 'Edit Role',
+			create: 'Create Role',
+			edit: 'Edit Role',
+			details: 'Role Details',
 			roles: 'Roles',
 			role: 'Role',
 		}
-
-	}
+	},
+	active_status_list: [
+		{label: 'Active', value: 'active'},
+		{label: 'Inactive', value: 'inactive'},
+	]
 };

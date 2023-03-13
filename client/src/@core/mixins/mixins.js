@@ -53,7 +53,14 @@ export default {
 					variant: variant
 				},
 			}, {icon: false, closeButton: false});
-
+		},
+	},
+	computed: {
+		appDir() {
+			return this.$store.state.appConfig.isRTL ? 'rtl' : 'ltr';
+		},
+		appLocale() {
+			return this.$i18n.locale;
 		}
 	}
 }

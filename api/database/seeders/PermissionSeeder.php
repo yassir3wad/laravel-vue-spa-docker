@@ -23,6 +23,7 @@ class PermissionSeeder extends Seeder
 
 		$collection = collect([
 			'users' => ['viewAny', 'view', 'create', 'update', 'delete', 'changeStatus', 'resetPassword'],
+			'roles' => ['viewAny', 'view', 'create', 'update', 'delete'],
 		]);
 
 		$collection->each(function ($item, $index) {
@@ -32,7 +33,7 @@ class PermissionSeeder extends Seeder
 				$singular = Str::singular($index);
 			}
 			foreach ($item as $subItem) {
-				Permission::updateOrCreate(['group' => $index, 'name' => "$subItem " . $singular]);
+				Permission::updateOrCreate(['group' => $index, 'guard_name' => config('auth.defaults.guard'), 'name' => "$subItem " . $singular]);
 			}
 		});
 

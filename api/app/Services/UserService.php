@@ -8,6 +8,7 @@ use Illuminate\Contracts\Hashing\Hasher;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class UserService
 {
@@ -68,14 +69,25 @@ class UserService
 			throw new \InvalidArgumentException('invalid value for image');
 		}
 
-		$attributes['image'] = $this->uploaderService->uploadFile($attributes['image'], config('upload.types.users.folder'));
+		try {
+			\DB::beginTransaction();
+			$attributes['image'] = $this->uploaderService->uploadFile($attributes['image'], config('upload.types.users.folder'));
 
-		$user = $this->model->newModelInstance(
-			Arr::only($attributes, ['name', 'username', 'email', 'mobile', 'image', 'status'])
-		)
-			->fill(['password' => $this->hasher->make($attributes['password'])]);
+			$user = $this->model->newModelInstance(
+				Arr::only($attributes, ['name', 'username', 'email', 'mobile', 'image', 'status'])
+			)
+				->fill(['password' => $this->hasher->make($attributes['password'])]);
 
-		$user->save();
+			$user->save();
+
+			$user->assignRole($attributes['role_ids']);
+
+			\DB::commit();
+		} catch (\Exception $exception) {
+			DB::rollBack();
+			throw $exception;
+		}
+
 
 		return $user;
 	}
@@ -97,9 +109,20 @@ class UserService
 			$attributes['image'] = $this->uploaderService->uploadFile($attributes['image'], config('upload.types.users.folder'));
 		}
 
-		$user->update(
-			Arr::only($attributes, ['name', 'username', 'email', 'mobile', 'image', 'status'])
-		);
+		try {
+			DB::beginTransaction();
+
+			$user->update(
+				Arr::only($attributes, ['name', 'username', 'email', 'mobile', 'image', 'status'])
+			);
+
+			$user->syncRoles($attributes['role_ids']);
+			DB::commit();
+		} catch (\Exception $exception) {
+			DB::rollBack();
+
+			throw $exception;
+		}
 	}
 
 	/**

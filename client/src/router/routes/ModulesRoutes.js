@@ -4,6 +4,7 @@ import authenticated from "@/router/middlewares/authenticated";
 const routes = [];
 const modulesRoutes = [
 	{name: 'users', singular: 'user'},
+	{name: 'roles', singular: 'role'},
 ];
 modulesRoutes.forEach(function (item) {
 	routes.push({

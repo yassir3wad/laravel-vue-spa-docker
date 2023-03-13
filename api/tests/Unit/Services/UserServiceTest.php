@@ -3,6 +3,7 @@
 namespace Tests\Unit\Services;
 
 use App\Enums\ActiveStatusEnum;
+use App\Models\Role;
 use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\UploadedFile;
@@ -59,6 +60,7 @@ class UserServiceTest extends TestCase
 			'mobile' => '+970567940999',
 			'password' => 'test123',
 			'image' => UploadedFile::fake()->image('test.png'),
+			'role_ids' => [Role::factory()->create()->getKey()],
 		];
 
 		$user = app(UserService::class)->createUser($data);
@@ -67,6 +69,8 @@ class UserServiceTest extends TestCase
 		$this->assertEquals($data['username'], $user->username);
 		$this->assertEquals($data['email'], $user->email);
 		$this->assertEquals($data['mobile'], $user->mobile);
+		$this->assertCount(1, $user->roles);
+		$this->assertEquals($data['role_ids'], $user->roles->modelKeys());
 		$this->assertNotNull($user->image);
 		$this->assertTrue(Hash::check($data['password'], $user->password));
 	}
@@ -85,6 +89,8 @@ class UserServiceTest extends TestCase
 	public function test_can_update_user()
 	{
 		$user = User::factory()->create(['image' => fake()->imageUrl]);
+		$user->assignRole(Role::factory()->create());
+
 		$data = [
 			'name' => 'yassir awad',
 			'username' => 'yassirawad',
@@ -92,6 +98,7 @@ class UserServiceTest extends TestCase
 			'mobile' => '+970567940999',
 			'password' => 'test123',
 			'image' => UploadedFile::fake()->image('test.png'),
+			'role_ids' => [Role::factory()->create()->getKey()],
 		];
 
 		app(UserService::class)->updateUser($user, $data);
@@ -100,6 +107,7 @@ class UserServiceTest extends TestCase
 		$this->assertEquals($data['username'], $user->username);
 		$this->assertEquals($data['email'], $user->email);
 		$this->assertEquals($data['mobile'], $user->mobile);
+		$this->assertEquals($data['role_ids'], $user->roles->modelKeys());
 		$this->assertStringStartsWith('users/', $user->image);
 	}
 

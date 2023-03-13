@@ -104,19 +104,20 @@
 
               <b-col cols="6">
                 <b-form-group
-                    :label="$t('Role')"
-                    label-for="role_id">
+                    :label="$t('modules.roles.roles')"
+                    label-for="role_ids">
                   <validation-provider
                       #default="{ errors }"
-                      name="required"
-                      rules=""
-                      vid="role_id">
+                      name="role_ids"
+                      vid="role_ids">
                     <v-select
-                        id="role_id"
-                        v-model="form.role_id"
+                        id="role_ids"
+                        label="name"
+                        multiple
+                        v-model="form.role_ids"
                         :state="errors.length > 0 ? false : null"
-                        :dir="$store.state.appConfig.isRTL ? 'rtl' : 'ltr'"
-                        :options="roleOptions"
+                        :dir="appDir"
+                        :options="roles"
                         class="w-100"
                     />
                     <small class="text-danger">{{ errors[0] }}</small>
@@ -238,6 +239,7 @@ import Ripple from 'vue-ripple-directive'
 import FileUploader from "@/views/components/FileUploader";
 import {SET_BREADCRUMB} from "@/store/breadcrumbs.store";
 import Mobile from "@/views/components/Mobile";
+import {getRoles} from "@core/comp-functions/roles";
 
 export default {
   components: {
@@ -256,7 +258,7 @@ export default {
         username: null,
         password: null,
         password_confirmation: null,
-        role_id: null,
+        role_ids: [],
         status: 'active',
         image: null,
       },
@@ -267,15 +269,16 @@ export default {
   methods: {
     submit() {
       this.processing = true;
-      console.log('form', this.form);
 
       this.$refs.form.validate().then((success) => {
         if (success) {
           const formData = new FormData();
 
-          ['name', 'username', 'email', 'mobile', 'role_id', 'status'].forEach(field => {
+          ['name', 'username', 'email', 'mobile', 'status'].forEach(field => {
             formData.append(field, this.form[field]);
           });
+
+          formData.append('role_ids', JSON.stringify(this.form.role_ids?.map(item => item.id)));
 
           if (this.form.image && this.form.image instanceof File) {
             formData.append('image', this.form.image);
@@ -315,7 +318,7 @@ export default {
             email: data.email,
             mobile: data.mobile,
             username: data.username,
-            role_id: data.role_id,
+            role_ids: data.roles,
             status: data.status,
             image: data.image,
           };
@@ -330,16 +333,10 @@ export default {
     ]);
   },
   setup() {
-    const roleOptions = [
-      {label: 'Admin', value: 'admin'},
-      {label: 'Author', value: 'author'},
-      {label: 'Editor', value: 'editor'},
-      {label: 'Maintainer', value: 'maintainer'},
-      {label: 'Subscriber', value: 'subscriber'},
-    ];
+    const {roles} = getRoles();
 
     return {
-      roleOptions,
+      roles
     };
   },
 }
