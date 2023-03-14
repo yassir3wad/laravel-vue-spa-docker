@@ -33,6 +33,11 @@ cp api/.env.dev.example api/.env.dev
 // then =>
 
 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+
+// then =>
+
+// run the migrations
+docker exec -it spa-dev-api-1 php artisan migrate --seed
 ```
 - To access the api open http://localhost:8000
 - To access the client open http://localhost:3000
