@@ -77,8 +77,9 @@
               @click="$router.push({ name: `${resource}.edit`, params: { id: data.item.id } })">
             <feather-icon icon="EditIcon" size="16"/>
           </b-button>
-          
+
           <b-dropdown
+              v-if="canDelete(data.item) || custom_dropdown_actions_slots.length"
               variant="link"
               no-caret
               :right="$store.state.appConfig.isRTL"

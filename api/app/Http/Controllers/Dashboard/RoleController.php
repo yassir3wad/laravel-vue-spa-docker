@@ -120,8 +120,6 @@ class RoleController extends Controller
 	 */
 	public function list()
 	{
-		$this->authorize('viewAny', Role::class);
-
 		return Responder::setData(
 			SimpleRoleResource::collection($this->permissionRepository->getAllRoles())
 		)->respond();
@@ -133,8 +131,6 @@ class RoleController extends Controller
 	 */
 	public function permissions()
 	{
-		$this->authorize('viewAny', Role::class);
-
 		PermissionResource::$useTranslations = true;
 
 		return Responder::setData(
