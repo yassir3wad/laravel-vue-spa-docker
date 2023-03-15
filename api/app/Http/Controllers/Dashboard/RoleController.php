@@ -135,6 +135,8 @@ class RoleController extends Controller
 	{
 		$this->authorize('viewAny', Role::class);
 
+		PermissionResource::$useTranslations = true;
+
 		return Responder::setData(
 			PermissionResource::collection($this->permissionRepository->getAllPermissions())
 		)->respond();

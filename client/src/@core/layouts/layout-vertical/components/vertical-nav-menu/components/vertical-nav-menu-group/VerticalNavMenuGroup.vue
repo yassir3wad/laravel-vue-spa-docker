@@ -72,9 +72,7 @@ export default {
     } = useVerticalNavMenuGroup(props.item)
 
     const {t} = useI18nUtils()
-    // TODO: revert after acel
-    // const { canViewVerticalNavMenuGroup } = useAclUtils()
-    const canViewVerticalNavMenuGroup = () => true;
+    const { canViewVerticalNavMenuGroup } = useAclUtils()
 
     return {
       resolveNavItemComponent,

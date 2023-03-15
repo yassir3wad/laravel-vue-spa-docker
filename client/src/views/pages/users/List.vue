@@ -152,10 +152,10 @@ export default {
   data() {
     return {
       actions: {
-        view: true,
-        create: true,
-        update: true,
-        delete: true,
+        view: this.$ability.can('view', 'user'),
+        create: this.$ability.can('create', 'user'),
+        update: this.$ability.can('update', 'user'),
+        delete: this.$ability.can('delete', 'user'),
       },
       filters: {
         name: {

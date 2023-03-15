@@ -19,14 +19,14 @@ export default [
 	// 	icon: 'UsersIcon',
 	// 	children: [
 	// 		{
-	// 			title: 'Users',
-	// 			icon: 'UserIcon',
-	// 			route: 'users.index',
-	// 		},
-	// 		{
-	// 			title: 'Roles',
+	// 			title: 'modules.roles.roles',
 	// 			icon: 'LockIcon',
 	// 			route: 'roles.index',
+	// 		},
+	// 		{
+	// 			title: 'modules.users.users',
+	// 			icon: 'UsersIcon',
+	// 			route: 'users.index',
 	// 		}
 	// 	]
 	// }

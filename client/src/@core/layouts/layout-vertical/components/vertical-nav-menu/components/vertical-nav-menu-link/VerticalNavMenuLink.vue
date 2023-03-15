@@ -1,7 +1,5 @@
 <template>
-<!--  v-if="canViewVerticalNavMenuLink(item)"-->
-
-  <li
+  <li v-if="canViewVerticalNavMenuLink(item)"
     class="nav-item"
     :class="{
       'active': isActive,

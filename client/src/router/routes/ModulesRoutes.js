@@ -1,5 +1,6 @@
 import ensureCsrfTokenSet from "@/router/middlewares/ensureCsrfTokenSet";
 import authenticated from "@/router/middlewares/authenticated";
+import authorized from "@/router/middlewares/authorized";
 
 const routes = [];
 const modulesRoutes = [
@@ -11,11 +12,11 @@ modulesRoutes.forEach(function (item) {
 		path: '/' + item.name,
 		name: `${item.name}.index`,
 		meta: {
-			middleware: [ensureCsrfTokenSet, authenticated],
+			middleware: [ensureCsrfTokenSet, authenticated, authorized],
 			resource: item.name,
 			permission: {
-				parent: item.name,
-				permission: 'viewAny user',
+				action: 'viewAny',
+				subject: item.singular,
 			}
 		},
 		component: () => import(`@/views/pages/${item.name}/List.vue`),
@@ -25,11 +26,11 @@ modulesRoutes.forEach(function (item) {
 		path: `/${item.name}/create`,
 		name: `${item.name}.create`,
 		meta: {
-			middleware: [ensureCsrfTokenSet, authenticated],
+			middleware: [ensureCsrfTokenSet, authenticated, authorized],
 			resource: item.name,
 			permission: {
-				parent: item.name,
-				permission: 'create user',
+				action: 'create',
+				subject: item.singular,
 			}
 		},
 		component: () => import(`@/views/pages/${item.name}/Form.vue`),
@@ -39,11 +40,11 @@ modulesRoutes.forEach(function (item) {
 		path: `/${item.name}/:id/edit`,
 		name: `${item.name}.edit`,
 		meta: {
-			middleware: [ensureCsrfTokenSet, authenticated],
+			middleware: [ensureCsrfTokenSet, authenticated, authorized],
 			resource: item.name,
 			permission: {
-				parent: item.name,
-				permission: 'update user',
+				action: 'update',
+				subject: item.singular,
 			}
 		},
 		component: () => import(`@/views/pages/${item.name}/Form.vue`),

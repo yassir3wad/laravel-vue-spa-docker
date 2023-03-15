@@ -128,7 +128,6 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('auth/logout').finally(() => {
-        // this.$ability.update(initialAbility)
         this.$router.push({name: 'login'})
       })
     },

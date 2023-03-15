@@ -17,7 +17,7 @@
         </b-col>
 
         <!-- Search -->
-        <b-col cols="12" md="6" v-if="canCreate">
+        <b-col cols="12" md="6" v-if="canCreate()">
           <div class="d-flex align-items-center justify-content-end">
             <b-button variant="primary" @click="$router.push({name: `${resource}.create`})">
               <span class="text-nowrap">{{ $t(`modules.${resource}.create`) }}</span>
