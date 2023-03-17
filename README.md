@@ -25,13 +25,13 @@
 
 ## How it works
 ### Containers
-1) **api**: laravel application (backend)
-2) **worker**: runs queue workers & crontab
-3) **mysql**: mysql database instance
-4) **redis**: redis database instance
-5) **mailpit**: acts as both an SMTP server, and provides a web interface to view all mails
-6) **client**: vue application (frontend)
-7) **webserver**: pass traffic to api & client containers (proxy)
+1) **api**: serves the backend app (laravel app)
+2) **client**: serves the fronted app (vue app)
+3) **webserver**: services static content, storage, and passes traffic to api & client containers (proxy)
+4) **mysql**: main database connection
+5) **redis**: cache driver / queue connection
+6) **mailpit**: SMTP server with a web interface to view all mails (just for dev env)
+7) **worker**: runs queue workers & crontab
 
 ## Installation
 ### Development Environment
