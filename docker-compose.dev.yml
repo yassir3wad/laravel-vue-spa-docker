@@ -13,7 +13,13 @@ services:
     volumes:
       - ./api/:/var/www/
       - /var/www/vendor
-      - ./api/local.ini:/usr/local/etc/php/conf.d/local.ini
+    env_file:
+      - ./api/.env.dev
+
+  worker:
+    volumes:
+      - ./api/:/var/www/
+      - /var/www/vendor
     env_file:
       - ./api/.env.dev
 

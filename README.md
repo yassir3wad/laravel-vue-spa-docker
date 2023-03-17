@@ -20,9 +20,18 @@
 - Mysql
 - Redis
 - Mailpit (as a test mail driver)
+- Redis Queues
+- Task Scheduling
 
 ## How it works
-TBD
+### Containers
+1) api: laravel application (backend)
+2) worker: runs queue workers & crontab
+3) mysql: mysql database instance
+4) redis: redis database instance
+5) mailpit: acts as both an SMTP server, and provides a web interface to view all mails
+6) client: vue application (frontend)
+7) webserver: pass traffic to api & client containers (proxy)
 
 ## Installation
 ### Development Environment
@@ -70,10 +79,9 @@ docker-compose -f docker-compose.yml -f docker-compose.prd.yml up --build
 * [x] Setup Laravel Permission
 * [x] Roles Module
 * [x] Users Module
-* [ ] Setup Scheduler
-* [ ] Setup Queue/Workers
+* [x] Setup Scheduler
+* [x] Setup Queue/Workers
 * [ ] Setup Horizon
-* [ ] Social Login
 * [ ] Settings Module
 * [ ] Real Time Notifications Module
 * [ ] Real Time Chat Module

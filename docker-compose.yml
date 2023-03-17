@@ -20,6 +20,15 @@ services:
     depends_on:
       - redis
       - mysql
+    environment:
+      CONTAINER_ROLE: app
+
+  worker:
+    image: spa/api
+    depends_on:
+      - api
+    environment:
+      CONTAINER_ROLE: worker
 
   mysql:
     image: mysql:8.0.32

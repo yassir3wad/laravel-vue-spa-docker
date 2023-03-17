@@ -20,7 +20,9 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     libzip-dev \
-    libonig-dev
+    libonig-dev \
+    supervisor \
+    cron
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -29,6 +31,16 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
+# setup redis
+RUN pecl install redis && docker-php-ext-enable redis
+
+# set php variables
+COPY local.ini /usr/local/etc/php/conf.d/local.ini
+
+# set crontab
+RUN echo "* * * * * /usr/local/bin/php /var/www/artisan schedule:run --verbose --no-interaction >> /var/log/cron.log 2>&1" > /etc/cron.d/my-cron
+RUN chmod 0644 /etc/cron.d/my-cron
+RUN touch /var/log/cron.log
 
 # Install composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
@@ -46,5 +58,11 @@ RUN composer dump-autoload -o \
     && chown -R :www-data /var/www \
     && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
+COPY start.sh /usr/local/bin/start
+RUN chmod +x /usr/local/bin/start
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
+
+CMD ["/usr/local/bin/start"]
