@@ -21,6 +21,7 @@
     "connect-history-api-fallback": "^2.0.0",
     "core-js": "3.8.1",
     "express": "^4.18.2",
+    "filepond": "^4.30.4",
     "filepond-plugin-file-validate-size": "^2.2.8",
     "filepond-plugin-file-validate-type": "^1.2.8",
     "filepond-plugin-image-preview": "^4.6.11",
