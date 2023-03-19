@@ -1,6 +1,7 @@
 const path = require('path')
 
 module.exports = {
+
   publicPath: '/',
   lintOnSave: false,
   css: {
@@ -16,7 +17,11 @@ module.exports = {
     devServer: {
       host: '0.0.0.0',
       public: process.env.APP_URL,
-      disableHostCheck: true
+      disableHostCheck: true,
+      watchOptions: {
+        poll: true, // or use an integer for a check every x milliseconds, e.g. poll: 1000,
+        ignored: /node_modules/ // otherwise it takes a lot of time to refresh
+      }
     },
     resolve: {
       alias: {
