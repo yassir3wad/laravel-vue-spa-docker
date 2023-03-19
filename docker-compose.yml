@@ -14,7 +14,6 @@ services:
       - client
 
   api:
-    image: spa/api
     build:
       context: ./api
     depends_on:
@@ -24,9 +23,8 @@ services:
       CONTAINER_ROLE: app
 
   worker:
-    image: spa/api
-    depends_on:
-      - api
+    build:
+      context: ./api
     environment:
       CONTAINER_ROLE: worker
 
@@ -39,7 +37,6 @@ services:
       - ./mysql/my.cnf:/etc/mysql/my.cnf
 
   client:
-    image: spa/client
     build:
       context: ./client
 
