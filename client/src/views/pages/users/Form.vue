@@ -223,7 +223,10 @@
                 variant="primary"
                 class="mb-75"
                 block
+                :disabled="processing"
                 type="submit">
+              <b-spinner v-if="processing" small type="grow"/>
+
               {{ $t('Save') }}
             </b-button>
           </b-card>
