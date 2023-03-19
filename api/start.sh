@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+
+
 set -e
 
 ROLE=${CONTAINER_ROLE:-app}
