@@ -25,6 +25,8 @@ services:
   worker:
     build:
       context: ./api
+    depends_on:
+      - api
     environment:
       CONTAINER_ROLE: worker
 
