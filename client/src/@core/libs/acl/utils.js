@@ -59,14 +59,34 @@ export const canViewVerticalNavMenuHeader = item => can(item.action, item.resour
  * Based on item's action and resource
  * @param {Object} item navigation object item
  */
-export const canViewHorizontalNavMenuLink = item => canViewVerticalNavMenuLink(item)
+export const canViewHorizontalNavMenuLink  = item => {
+	const r = getCurrentInstance().proxy.$router.resolve({
+		name: item.route
+	});
+
+	if (r.resolved && r.resolved.meta && r.resolved.meta.permission) {
+		return can(r.resolved.meta.permission.action, r.resolved.meta.permission.subject);
+	}
+
+	return true;
+}
 
 /**
  * Check if user can view item based on it's ability
  * Based on item's action and resource
  * @param {Object} item navigation object item
  */
-export const canViewHorizontalNavMenuHeaderLink = item => can(item.action, item.resource)
+export const canViewHorizontalNavMenuHeaderLink = item => {
+	const r = getCurrentInstance().proxy.$router.resolve({
+		name: item.route
+	});
+
+	if (r.resolved && r.resolved.meta && r.resolved.meta.permission) {
+		return can(r.resolved.meta.permission.action, r.resolved.meta.permission.subject);
+	}
+
+	return true;
+}
 
 /**
  * Check if user can view item based on it's ability
