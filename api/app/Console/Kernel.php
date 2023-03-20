@@ -7,13 +7,14 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-    /**
-     * Define the application's command schedule.
-     */
-    protected function schedule(Schedule $schedule): void
-    {
-         $schedule->command('inspire')->everyMinute()->appendOutputTo('/var/log/cron.log');
-    }
+	/**
+	 * Define the application's command schedule.
+	 */
+	protected function schedule(Schedule $schedule): void
+	{
+		$schedule->command('inspire')->everyMinute()->appendOutputTo('/var/log/inspire.log');
+		$schedule->command('horizon:snapshot')->everyFiveMinutes()->appendOutputTo('/var/log/horizon:snapshot.log');
+	}
 
     /**
      * Register the commands for the application.

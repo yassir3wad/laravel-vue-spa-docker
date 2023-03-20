@@ -2,6 +2,8 @@ FROM php:8.1.16-fpm
 
 ARG MODE=development
 ENV APP_ENV=$MODE
+ARG USER=www-data
+ARG GROUP=www-data
 
 # Set working directory
 WORKDIR /var/www
@@ -38,9 +40,11 @@ RUN pecl install redis && docker-php-ext-enable redis
 COPY local.ini /usr/local/etc/php/conf.d/local.ini
 
 # set crontab
-RUN echo "* * * * * /usr/local/bin/php /var/www/artisan schedule:run --verbose --no-interaction >> /var/log/cron.log 2>&1" > /etc/cron.d/my-cron
-RUN chmod 0644 /etc/cron.d/my-cron
+COPY ./crontab /etc/cron.d/cronfile
 RUN touch /var/log/cron.log
+RUN chmod 0644 /etc/cron.d/cronfile && \
+    crontab /etc/cron.d/cronfile
+
 
 # Install composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
@@ -55,8 +59,9 @@ RUN if [[ "$MODE" = "production" ]];  \
 COPY . .
 
 RUN composer dump-autoload -o \
-    && chown -R :www-data /var/www \
-    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+    && chown -R $USER:$GROUP /var/www \
+    && chmod -R 755 /var/www \
+    && chmod -R 777 /var/www/storage
 
 COPY start.sh /usr/local/bin/start
 RUN chmod +x /usr/local/bin/start

@@ -81,7 +81,7 @@ docker-compose -f docker-compose.yml -f docker-compose.prd.yml up --build
 * [x] Users Module
 * [x] Setup Scheduler
 * [x] Setup Queue/Workers
-* [ ] Setup Horizon
+* [x] Setup Horizon
 * [ ] Settings Module
 * [ ] Real Time Notifications Module
 * [ ] Real Time Chat Module

@@ -17,6 +17,9 @@ services:
       - ./api/.env.dev
 
   worker:
+    build:
+      args:
+        MODE: development
     volumes:
       - ./api/:/var/www/
       - /var/www/vendor

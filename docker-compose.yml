@@ -14,6 +14,7 @@ services:
       - client
 
   api:
+    image: api
     build:
       context: ./api
     depends_on:
@@ -23,12 +24,14 @@ services:
       CONTAINER_ROLE: app
 
   worker:
+    image: api
     build:
       context: ./api
     depends_on:
       - api
     environment:
       CONTAINER_ROLE: worker
+    restart: unless-stopped
 
   mysql:
     image: mysql:8.0.32
@@ -39,6 +42,7 @@ services:
       - ./mysql/my.cnf:/etc/mysql/my.cnf
 
   client:
+    image: client
     build:
       context: ./client
 

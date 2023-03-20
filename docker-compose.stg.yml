@@ -10,6 +10,13 @@ services:
     env_file:
       - ./api/.env.stg
 
+  worker:
+    build:
+      args:
+        MODE: staging
+    env_file:
+      - ./api/.env.stg
+
   mysql:
     environment:
       MYSQL_DATABASE: laravel
