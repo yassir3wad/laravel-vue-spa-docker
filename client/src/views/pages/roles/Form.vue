@@ -97,8 +97,11 @@
               class="mr-1"
               variant="primary"
               type="submit"
+              :disabled="processing"
               v-ripple.400="'rgba(255, 255, 255, 0.15)'"
           >
+            <b-spinner v-if="processing" small type="grow"/>
+
             {{ $t('Save') }}
           </b-button>
         </b-col>
