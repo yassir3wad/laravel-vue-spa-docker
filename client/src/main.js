@@ -17,6 +17,7 @@ import './global-components'
 
 // 3rd party plugins
 import '@axios'
+import '@core/libs/sokets'
 import '@/libs/acl'
 import '@/libs/portal-vue'
 // import '@/libs/clipboard'
